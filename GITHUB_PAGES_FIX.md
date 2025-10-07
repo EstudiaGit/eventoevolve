@@ -12,6 +12,13 @@
 - ✅ Configuración explícita de Node 20
 - ✅ Path especificado correctamente
 
+### 3. **🔧 PROBLEMA CRÍTICO RESUELTO: Archivos de DB en páginas**
+- ✅ Movidos `client.ts` y `schema.ts` de `src/pages/db/` a `src/db/`
+- ✅ **Causa del error**: Astro intentaba generar páginas web de estos archivos
+- ✅ Estos archivos requerían `DATABASE_URL` durante el build
+- ✅ GitHub Actions no tiene acceso a variables de entorno locales
+- ✅ **Solución**: Los archivos de configuración NO deben estar en `src/pages/`
+
 ## 🚨 IMPORTANTE: Configuración de GitHub Pages
 
 Debes verificar que GitHub Pages esté configurado correctamente en tu repositorio:
