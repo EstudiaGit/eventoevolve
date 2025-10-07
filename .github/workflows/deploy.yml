@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   # Se ejecuta en los pushes al branch `main`
   push:
-    branches: [master]
+    branches: [main]
   # Te permite ejecutar este workflow manualmente desde la pestaña Actions
   workflow_dispatch:
 
