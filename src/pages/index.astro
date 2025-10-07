@@ -1,0 +1,1242 @@
+---
+// src/pages/index.astro
+const pageTitle = "FestiGeek Canarias 2025";
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{pageTitle}</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      /* Colores Neutros */
+      --color-marfil: #F7F4EA;
+      --color-negro: #111111;
+      --color-gris: #5A5A5A;
+      --color-borde-suave: #E7E2D7;
+      --color-blanco: #FFFFFF;
+      
+      /* Colores de Acento */
+      --color-turquesa: #2EE7D3;
+      --color-menta: #23D9B3;
+      --color-lima: #C9F86A;
+      --color-amarillo: #FFD64D;
+      --color-naranja: #FF7A00;
+      --color-coral: #FF4F6D;
+      --color-lavanda: #B79BF5;
+      --color-cian-claro: #7CF3E9;
+      
+      /* Espaciado */
+      --spacing-xs: 8px;
+      --spacing-sm: 16px;
+      --spacing-md: 24px;
+      --spacing-lg: 32px;
+      --spacing-xl: 48px;
+      --spacing-2xl: 64px;
+      --spacing-3xl: 96px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--color-marfil);
+      color: var(--color-negro);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(44px, 8vw, 72px);
+      font-weight: 900;
+    }
+
+    h2 {
+      font-size: clamp(32px, 5vw, 48px);
+      font-weight: 800;
+    }
+
+    h3 {
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding: 0 var(--spacing-lg);
+      }
+    }
+
+    /* Mejora de Botones - Estados más claros */
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      border: 2px solid var(--color-negro);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background-color: var(--color-negro);
+      color: var(--color-marfil);
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 400ms;
+    }
+
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary:focus-visible {
+      outline: 3px solid var(--color-turquesa);
+      outline-offset: 3px;
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--color-negro);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--color-negro);
+      color: var(--color-marfil);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .btn-outline:active {
+      transform: translateY(0);
+    }
+
+    .btn-outline:focus-visible {
+      outline: 3px solid var(--color-turquesa);
+      outline-offset: 3px;
+    }
+
+    /* Ticket Cards - Mejora de jerarquía visual */
+    .ticket-card {
+      background-color: var(--color-blanco);
+      border: 3px solid var(--color-negro);
+      padding: var(--spacing-lg);
+      text-align: center;
+      position: relative;
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 4px 4px 0 var(--color-negro);
+    }
+
+    .ticket-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0 var(--color-negro);
+    }
+
+    .ticket-card.featured {
+      border-width: 4px;
+      transform: scale(1.05);
+      z-index: 1;
+    }
+
+    .ticket-card.featured:hover {
+      transform: scale(1.05) translate(-2px, -2px);
+    }
+
+    .ticket-type {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border: 2px solid var(--color-negro);
+      display: inline-block;
+      margin-bottom: var(--spacing-md);
+      background-color: var(--color-marfil);
+    }
+
+    .ticket-price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 56px;
+      font-weight: 900;
+      margin-bottom: var(--spacing-xs);
+      line-height: 1;
+    }
+
+    .ticket-price span {
+      font-size: 28px;
+      font-weight: 700;
+      vertical-align: super;
+    }
+
+    .ticket-original-price {
+      font-size: 24px;
+      text-decoration: line-through;
+      color: var(--color-gris);
+      display: block;
+      margin-top: -8px;
+      margin-bottom: 8px;
+    }
+
+    .ticket-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: var(--spacing-sm);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .ticket-features {
+      list-style: none;
+      padding: 0;
+      margin: var(--spacing-md) 0;
+      text-align: left;
+    }
+
+    .ticket-features li {
+      padding: 12px 0;
+      border-top: 1px solid var(--color-borde-suave);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .ticket-features li:first-child {
+      border-top: 2px solid var(--color-negro);
+      margin-top: 16px;
+    }
+
+    .ticket-features li::before {
+      content: '✓';
+      color: var(--color-menta);
+      font-weight: bold;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Header - Mejora de navegación móvil */
+    .header {
+      background-color: var(--color-turquesa);
+      height: 72px;
+      border-bottom: 3px solid var(--color-negro);
+      display: flex;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .nav-links {
+      display: none;
+      gap: var(--spacing-lg);
+    }
+
+    .nav-links a {
+      font-weight: 600;
+      color: var(--color-negro);
+      text-decoration: none;
+      position: relative;
+      padding: 4px 0;
+      transition: color 200ms;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: var(--color-negro);
+      transition: width 200ms;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-links a:focus-visible {
+      outline: 2px solid var(--color-negro);
+      outline-offset: 4px;
+      border-radius: 2px;
+    }
+
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+      .menu-toggle {
+        display: none;
+      }
+    }
+
+    .menu-toggle {
+      background: none;
+      border: 2px solid var(--color-negro);
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .menu-toggle:hover {
+      background-color: var(--color-negro);
+      color: var(--color-turquesa);
+    }
+
+    /* Chips mejorados */
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background-color: var(--color-marfil);
+      border: 2px solid var(--color-negro);
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 200ms;
+      box-shadow: 2px 2px 0 var(--color-negro);
+    }
+
+    .chip:hover {
+      background-color: var(--color-amarillo);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--color-negro);
+    }
+
+    /* Badge de descuento mejorado */
+    .discount-badge {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background-color: var(--color-coral);
+      color: var(--color-blanco);
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      border: 3px solid var(--color-negro);
+      box-shadow: 2px 2px 0 var(--color-negro);
+      z-index: 2;
+      letter-spacing: 1px;
+      transform: rotate(-5deg);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(-5deg) scale(1.05); }
+    }
+
+    /* 🎯 MEJORA 1: Hero con imagen de fondo adaptable */
+    .hero {
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(29, 54, 54, 0.9) 0%, rgba(50, 31, 53, 0.9) 100%);
+      color: var(--color-marfil);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 140%;
+      background-image: url('/images/comic-texture.png'); /* 👈 Aquí pones tu imagen */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+      opacity: 0.8; /* Controla la visibilidad de la imagen */
+    }
+
+    /* Versión responsive de la imagen de fondo */
+    @media (max-width: 768px) {
+      .hero::before {
+        background-position: center;
+        background-size: cover;
+      }
+    }
+
+    /* 🎯 MEJORA 2: Sección tickets con fondo de cómic sutil */
+    .tickets-section {
+      padding: var(--spacing-3xl) 0;
+      background-color: var(--color-marfil);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tickets-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/images/hero-background.jpg'); /* 👈 Aquí pones tu textura de cómic */
+      background-size: 400px 400px; /* Ajusta según tu imagen */
+      background-repeat: repeat;
+      background-position: center;
+      opacity: 0.; /* Muy sutil, como páginas de cómic antiguas */
+      z-index: 0;
+      pointer-events: none;
+      mix-blend-mode: multiply; /* Se mezcla sutilmente con el fondo */
+    }
+
+    /* Efecto de papel envejecido adicional */
+    .tickets-section::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.01) 2px,
+          rgba(0, 0, 0, 0.01) 4px
+        );
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .tickets-section > * {
+      position: relative;
+      z-index: 1;
+    }
+
+/* 🎯 MEJORA 3: Guest cards - TODO en el mismo cajón */
+.guest-card {
+  text-align: center;
+  position: relative;
+  height: auto;
+}
+
+.guest-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.guest-card-front {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: transparent;
+}
+
+/* El cajón que contiene TODO */
+.guest-image {
+  width: 220px;
+  height: 280px;
+  background-color: var(--color-borde-suave);
+  border: 3px solid var(--color-negro);
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 var(--color-negro);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.guest-card:hover .guest-image {
+  box-shadow: 6px 6px 0 var(--color-negro);
+  transform: translate(-2px, -2px);
+}
+
+/* Contenido superior: foto + info */
+.guest-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--spacing-md);
+  background: linear-gradient(135deg, var(--color-borde-suave), var(--color-marfil));
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.guest-placeholder {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 2px solid var(--color-negro);
+  margin-bottom: var(--spacing-sm);
+}
+
+.guest-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  color: var(--color-negro);
+}
+
+.guest-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gris);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* La cortina que sube desde abajo DENTRO del mismo cajón */
+.guest-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 0;
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.96) 0%, rgba(255, 140, 50, 0.94) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--spacing-md);
+  overflow: hidden;
+  transition: height 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  backdrop-filter: blur(4px);
+}
+
+.guest-card:hover .guest-card-overlay {
+  height: 100%; /* Cubre todo el cajón */
+}
+
+/* Contenido de la cortina */
+.overlay-content {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1) 100ms;
+  width: 100%;
+  text-align: center;
+}
+
+.guest-card:hover .overlay-content {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.guest-name-overlay {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--color-blanco);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  line-height: 1.2;
+}
+
+.guest-role-overlay {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-negro);
+  margin-bottom: var(--spacing-md);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Redes sociales */
+.social-links {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  width: 100%;
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-blanco);
+  border: 3px solid var(--color-negro);
+  color: var(--color-negro);
+  text-decoration: none;
+  font-size: 22px;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 2px 2px 0 var(--color-negro);
+  position: relative;
+  overflow: hidden;
+}
+
+.social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-negro);
+  transition: left 300ms;
+  z-index: -1;
+}
+
+.social-link:hover::before {
+  left: 0;
+}
+
+.social-link:hover {
+  color: var(--color-blanco);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 var(--color-negro);
+}
+
+.social-icon {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+
+    /* Legend mejorada */
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-xl);
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: 8px 16px;
+      background-color: var(--color-blanco);
+      border: 2px solid var(--color-negro);
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .legend-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--color-negro);
+      flex-shrink: 0;
+    }
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 800ms ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 400;
+      margin-bottom: var(--spacing-sm);
+      color: var(--color-cian-claro);
+      opacity: 0;
+      animation: fadeInUp 800ms ease-out 200ms forwards;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-cta {
+      margin-top: var(--spacing-xl);
+      opacity: 0;
+      animation: fadeInUp 800ms ease-out 400ms forwards;
+    }
+
+    /* Formas decorativas con animación */
+    .shape {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .shape-square {
+      border: 3px solid var(--color-negro);
+    }
+
+    .shape-1 {
+      width: 150px;
+      height: 150px;
+      background-color: var(--color-turquesa);
+      top: 10%;
+      right: 5%;
+      transform: rotate(45deg);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .shape-2 {
+      width: 100px;
+      height: 100px;
+      background-color: var(--color-coral);
+      bottom: 10%;
+      left: 5%;
+      animation: float 5s ease-in-out infinite 1s;
+    }
+
+    .shape-3 {
+      width: 80px;
+      height: 80px;
+      background-color: var(--color-lima);
+      top: 50%;
+      left: 10%;
+      transform: rotate(30deg);
+      animation: float 7s ease-in-out infinite 2s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(45deg); }
+      50% { transform: translateY(-20px) rotate(45deg); }
+    }
+
+    /* Info banner mejorado */
+    .info-banner {
+      padding: 80px 0;
+      background: linear-gradient(135deg, var(--color-cian-claro) 0%, var(--color-turquesa) 100%);
+      border-bottom: 3px solid var(--color-negro);
+      text-align: center;
+    }
+
+    .info-detail {
+      font-size: 20px;
+      margin-bottom: var(--spacing-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .cta-group {
+      display: flex;
+      gap: var(--spacing-sm);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Footer mejorado */
+    footer {
+      padding: var(--spacing-xl) 0;
+      background-color: var(--color-negro);
+      color: var(--color-marfil);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-xl);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .footer-section h4 {
+      color: var(--color-turquesa);
+      margin-bottom: var(--spacing-sm);
+      font-size: 18px;
+    }
+
+    .footer-section p,
+    .footer-section a {
+      color: var(--color-borde-suave);
+      font-size: 14px;
+      line-height: 1.8;
+      text-decoration: none;
+      transition: color 200ms;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-turquesa);
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--color-gris);
+      padding-top: var(--spacing-md);
+      text-align: center;
+      color: var(--color-borde-suave);
+      font-size: 14px;
+    }
+
+    /* Accesibilidad */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* Scroll suave */
+    html {
+      scroll-behavior: smooth;
+    }
+
+ /* Responsive */
+@media (max-width: 767px) {
+  .guest-image {
+    width: 200px;
+    height: 260px;
+  }
+
+  .guest-placeholder {
+    width: 100px;
+    height: 100px;
+    font-size: 48px;
+  }
+
+  .guest-name {
+    font-size: 15px;
+  }
+
+  .guest-role {
+    font-size: 11px;
+  }
+
+  .guest-name-overlay {
+    font-size: 18px;
+  }
+
+  .social-link {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+}
+  </style>
+</head>
+<body>
+  
+  <!-- HEADER -->
+  <header class="header">
+    <div class="container">
+      <nav style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <a href="/" style="font-family: 'Space Grotesk', sans-serif; font-weight: 900; font-size: 24px; color: var(--color-negro); text-decoration: none;">
+          COMIC CON FESTIVAL
+        </a>
+        <div class="nav-links">
+          <a href="#tickets">TICKETS</a>
+          <a href="#invitados">INVITADOS</a>
+          <a href="#programa">PROGRAMA</a>
+          <a href="#ubicacion">UBICACIÓN</a>
+        </div>
+        <button class="menu-toggle" aria-label="Abrir menú de navegación">
+          MENÚ
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION CON IMAGEN DE FONDO -->
+  <section class="hero">
+    <!-- Formas decorativas -->
+    <div class="shape shape-square shape-1"></div>
+    <div class="shape shape-square shape-2"></div>
+    <div class="shape shape-square shape-3"></div>
+    
+    <div class="container hero-content">
+      <h1 style="margin-bottom: var(--spacing-md); text-shadow: 3px 3px 6px rgba(0,0,0,0.7);">
+        COMIC CON FESTIVAL
+      </h1>
+      
+      <p class="hero-subtitle">
+        Unleash Your Inner Hero. Game. Cosplay. Create.
+      </p>
+      
+      <div class="hero-cta">
+        <a href="#tickets" class="btn btn-outline" style="font-size: 16px; padding: 20px 48px; color: var(--color-marfil); border-color: var(--color-marfil);">
+          GET TICKETS
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKETS SECTION CON TEXTURA DE CÓMIC -->
+  <section id="tickets" class="tickets-section">
+    <div class="container">
+      <h2 style="text-align: center; margin-bottom: var(--spacing-2xl);">
+        CHOOSE YOUR ADVENTURE
+      </h2>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); max-width: 1100px; margin: 0 auto;">
+        
+        <!-- Day Pass -->
+        <div class="ticket-card" style="background-color: var(--color-menta);">
+          <div class="ticket-type">
+            DAY PASS
+          </div>
+          <div class="ticket-price">
+            <span>€</span>99
+          </div>
+          <div class="ticket-title">
+            Un Día
+          </div>
+          <ul class="ticket-features">
+            <li>Acceso general 1 día</li>
+            <li>Zona de exposición</li>
+            <li>Meet & Greet básico</li>
+            <li>Zona gaming</li>
+          </ul>
+          <a href="/comprar/day-pass" class="btn btn-primary" style="width: 100%;">
+            BUY NOW
+          </a>
+        </div>
+
+        <!-- Weekend Pass - DESTACADO -->
+        <div class="ticket-card featured" style="background-color: var(--color-naranja); position: relative;">
+          <div class="discount-badge">
+            -20%
+          </div>
+          <div class="ticket-type" style="background-color: var(--color-negro); color: var(--color-amarillo); border-color: var(--color-negro);">
+            ⭐ WEEKEND PASS
+          </div>
+          <div class="ticket-original-price">
+            <span>€</span>198
+          </div>
+          <div class="ticket-price">
+            <span>€</span>159
+          </div>
+          <div class="ticket-title">
+            Fin de Semana
+          </div>
+          <ul class="ticket-features">
+            <li>Acceso 2 días completo</li>
+            <li>Entrada prioritaria</li>
+            <li>Descuento 10% merchandising</li>
+            <li>Acceso a talleres</li>
+            <li>Meet & Greet premium</li>
+          </ul>
+          <a href="/comprar/weekend-pass" class="btn btn-primary" style="width: 100%;">
+            BUY NOW
+          </a>
+        </div>
+
+        <!-- VIP Experience -->
+        <div class="ticket-card" style="background-color: var(--color-lavanda);">
+          <div class="ticket-type">
+            VIP EXPERIENCE
+          </div>
+          <div class="ticket-price">
+            <span>€</span>295
+          </div>
+          <div class="ticket-title">
+            Experiencia VIP
+          </div>
+          <ul class="ticket-features">
+            <li>Todo lo del Weekend Pass</li>
+            <li>Backstage tour exclusivo</li>
+            <li>Cena con invitados</li>
+            <li>Asiento preferente</li>
+            <li>Pack exclusivo de regalos</li>
+            <li>Foto profesional</li>
+          </ul>
+          <a href="/comprar/vip" class="btn btn-primary" style="width: 100%;">
+            BUY NOW
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Early Bird Notice -->
+      <div style="text-align: center; margin-top: var(--spacing-xl);">
+        <div class="chip" style="background-color: var(--color-amarillo); font-size: 16px;">
+          <span style="font-size: 20px;">⚡</span>
+          <span>EARLY BIRD: Ahorra 20% hasta el 15 de enero</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- FEATURED GUESTS - TODO EN EL MISMO CAJÓN -->
+<section id="invitados" style="padding: var(--spacing-3xl) 0; background-color: var(--color-blanco); border-top: 3px solid var(--color-negro); border-bottom: 3px solid var(--color-negro);">
+  <div class="container">
+    <h2 style="text-align: center; margin-bottom: var(--spacing-2xl);">
+      FEATURED GUESTS & ARTISTS
+    </h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--spacing-lg); max-width: 1000px; margin: 0 auto;">
+      
+      <!-- Guest 1 -->
+      <div class="guest-card">
+        <div class="guest-card-inner">
+          <div class="guest-card-front">
+            <!-- TODO DENTRO DEL MISMO CAJÓN -->
+            <div class="guest-image">
+              <!-- Contenido visible por defecto -->
+              <div class="guest-content">
+                <div class="guest-placeholder">👤</div>
+                <h3 class="guest-name">Joel Gutiérrez</h3>
+                <p class="guest-role">Doblador de Anime</p>
+              </div>
+              
+              <!-- CORTINA QUE SUBE -->
+              <div class="guest-card-overlay">
+                <div class="overlay-content">
+                  <h3 class="guest-name-overlay">Joel Gutiérrez</h3>
+                  <p class="guest-role-overlay">Doblador de Anime</p>
+                  
+                  <div class="social-links">
+                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
+                    </a>
+                    <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                      <span class="social-icon"><i class="fa-brands fa-x-twitter"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guest 2 -->
+      <div class="guest-card">
+        <div class="guest-card-inner">
+          <div class="guest-card-front">
+            <div class="guest-image">
+              <div class="guest-content">
+                <div class="guest-placeholder">👤</div>
+                <h3 class="guest-name">Marina López</h3>
+                <p class="guest-role">Artista de Cómic</p>
+              </div>
+              
+              <div class="guest-card-overlay">
+                <div class="overlay-content">
+                  <h3 class="guest-name-overlay">Marina López</h3>
+                  <p class="guest-role-overlay">Artista de Cómic</p>
+                  
+                  <div class="social-links">
+                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
+                    </a>
+                    <a href="https://facebook.com" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                      <span class="social-icon"><i class="fa-brands fa-facebook"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guest 3 -->
+      <div class="guest-card">
+        <div class="guest-card-inner">
+          <div class="guest-card-front">
+            <div class="guest-image">
+              <div class="guest-content">
+                <div class="guest-placeholder">👤</div>
+                <h3 class="guest-name">Carlos Ruiz</h3>
+                <p class="guest-role">Streamer Gaming</p>
+              </div>
+              
+              <div class="guest-card-overlay">
+                <div class="overlay-content">
+                  <h3 class="guest-name-overlay">Carlos Ruiz</h3>
+                  <p class="guest-role-overlay">Streamer Gaming</p>
+                  
+                  <div class="social-links">
+                    <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                      <span class="social-icon"><i class="fa-brands fa-x-twitter"></i></span>
+                    </a>
+                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guest 4 -->
+      <div class="guest-card">
+        <div class="guest-card-inner">
+          <div class="guest-card-front">
+            <div class="guest-image">
+              <div class="guest-content">
+                <div class="guest-placeholder">👤</div>
+                <h3 class="guest-name">Ana Martín</h3>
+                <p class="guest-role">Cosplayer Pro</p>
+              </div>
+              
+              <div class="guest-card-overlay">
+                <div class="overlay-content">
+                  <h3 class="guest-name-overlay">Ana Martín</h3>
+                  <p class="guest-role-overlay">Cosplayer Pro</p>
+                  
+                  <div class="social-links">
+                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
+                    </a>
+                    <a href="https://tiktok.com" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
+                      <span class="social-icon"><i class="fa-brands fa-tiktok"></i></span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Categories Legend -->
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-icon" style="background-color: var(--color-turquesa);"></div>
+        <span>Gaming Arena</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background-color: var(--color-naranja);"></div>
+        <span>Panels & Showcases</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-icon" style="background-color: var(--color-lavanda);"></div>
+        <span>Cosplay & Photoshoots</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- INFO SECTION -->
+  <section class="info-banner" id="ubicacion">
+    <div class="container">
+      <h2 style="margin-bottom: var(--spacing-lg);">
+        Las Palmas de Gran Canaria te espera
+      </h2>
+      <p class="info-detail">
+        <span style="font-size: 24px;">📍</span>
+        <span>Recinto Ferial de Canarias · Pabellón 7</span>
+      </p>
+      <p class="info-detail" style="font-size: 18px; margin-bottom: var(--spacing-lg);">
+        <span style="font-size: 20px;">📅</span>
+        <span>15-16 de Marzo 2025 · 10:00 - 21:00</span>
+      </p>
+      <div class="cta-group">
+        <a href="#tickets" class="btn btn-primary">
+          COMPRAR TICKETS
+        </a>
+        <a href="/info" class="btn btn-outline">
+          MÁS INFORMACIÓN
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        
+        <div class="footer-section">
+          <h4>Términos & Condiciones</h4>
+          <p><a href="/terminos">Consulta nuestros términos y condiciones de venta</a></p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Política de Privacidad</h4>
+          <p><a href="/privacidad">Tu privacidad es importante para nosotros</a></p>
+        </div>
+
+        <div class="footer-section">
+          <h4>Contacto</h4>
+          <p>
+            <a href="mailto:info@festigeekcanarias.com">info@festigeekcanarias.com</a><br>
+            <a href="tel:+34922123456">+34 922 123 456</a>
+          </p>
+        </div>
+
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2025 FestiGeek Canarias. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

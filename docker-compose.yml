@@ -1,0 +1,109 @@
+# docker-compose.yml
+version: "3.9"
+
+services:
+  # ═════════════════════════════════════════════
+  # Servicio 1: Aplicación Astro
+  # ═════════════════════════════════════════════
+  app:
+    container_name: festivgeek-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development # Usa el stage "development"
+
+    ports:
+      - "4321:4321" # Puerto de Astro
+
+    volumes:
+      # HOT RELOAD: monta tu código local dentro del container
+      - ./src:/app/src
+      - ./public:/app/public
+      - ./astro.config.mjs:/app/astro.config.mjs
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./drizzle:/app/drizzle
+      # Evita que node_modules se sobrescriba
+      - /app/node_modules
+
+    environment:
+      # Variables de entorno (conectan con la DB)
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://festivgeek_user:secretpassword@db:5432/festivgeek_db
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - PUBLIC_STRIPE_PUBLISHABLE_KEY=${PUBLIC_STRIPE_PUBLISHABLE_KEY}
+      - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
+
+    depends_on:
+      db:
+        condition: service_healthy # Espera a que la DB esté lista
+
+    networks:
+      - festivgeek-network
+
+    # Reiniciar automáticamente si crashea
+    restart: unless-stopped
+
+  # ═════════════════════════════════════════════
+  # Servicio 2: Base de Datos PostgreSQL
+  # ═════════════════════════════════════════════
+  db:
+    container_name: festivgeek-db
+    image: postgres:16-alpine
+
+    ports:
+      - "5432:5432" # Accesible desde tu máquina en localhost:5432
+
+    environment:
+      POSTGRES_USER: festivgeek_user
+      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_DB: festivgeek_db
+
+    volumes:
+      # PERSISTENCIA: Los datos sobreviven aunque pares el container
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U festivgeek_user -d festivgeek_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - festivgeek-network
+
+    restart: unless-stopped
+
+  # ═════════════════════════════════════════════
+  # Servicio 3: Stripe CLI (para webhooks locales)
+  # ═════════════════════════════════════════════
+  stripe:
+    container_name: festivgeek-stripe
+    image: stripe/stripe-cli:latest
+
+    command: listen --forward-to app:4321/api/webhooks --skip-verify
+
+    environment:
+      - STRIPE_API_KEY=${STRIPE_SECRET_KEY}
+      - STRIPE_DEVICE_NAME=festivgeek-docker
+
+    depends_on:
+      - app
+
+    networks:
+      - festivgeek-network
+
+    restart: unless-stopped
+
+# ═════════════════════════════════════════════
+# Redes: Comunicación entre containers
+# ═════════════════════════════════════════════
+networks:
+  festivgeek-network:
+    driver: bridge
+
+# ═════════════════════════════════════════════
+# Volúmenes: Persistencia de datos
+# ═════════════════════════════════════════════
+volumes:
+  postgres_data:
+    driver: local

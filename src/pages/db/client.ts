@@ -1,0 +1,15 @@
+// src/db/client.ts
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import * as schema from "./schema";
+
+// Conexión a PostgreSQL
+const connectionString = import.meta.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error("DATABASE_URL no está definida en las variables de entorno");
+}
+
+const client = postgres(connectionString);
+
+export const db = drizzle(client, { schema });

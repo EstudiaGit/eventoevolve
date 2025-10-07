@@ -1,0 +1,16 @@
+# .dockerignore
+# (Contenido idéntico al que proporcionaste)
+node_modules
+dist
+.astro
+.env
+.env.local
+.git
+.gitignore
+*.md
+npm-debug.log*
+.DS_Store
+.vscode
+coverage
+*.log
+drizzle/*.sql
