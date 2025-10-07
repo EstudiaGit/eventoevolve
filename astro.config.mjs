@@ -53,7 +53,7 @@ import tailwind from "@astrojs/tailwind";
 
 export default defineConfig({
   site: "https://EstudiaGit.github.io",
-  //base: "/eventotickets",
+  base: "/eventotickets",
   output: "static",
   integrations: [
     tailwind({
