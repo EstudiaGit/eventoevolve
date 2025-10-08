@@ -402,7 +402,7 @@ const pageTitle = "FestiGeek Canarias 2025";
       left: 0;
       width: 100%;
       height: 140%;
-      background-image: url('/images/comic-texture.png'); /* 👈 Aquí pones tu imagen */
+      background-image: url('public/images/comic-texture.png'); /* 👈 Aquí pones tu imagen */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -701,11 +701,13 @@ const pageTitle = "FestiGeek Canarias 2025";
 
 .legend-item span {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 400;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
 }
+
 
 /* Responsive */
 @media (max-width: 767px) {
@@ -1194,7 +1196,7 @@ const pageTitle = "FestiGeek Canarias 2025";
   }
 
   .guest-name {
-    font-size: 15px;
+    font-size: 18px;
   }
 
   .guest-role {
@@ -1202,7 +1204,7 @@ const pageTitle = "FestiGeek Canarias 2025";
   }
 
   .guest-name-overlay {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .social-link {
@@ -1239,7 +1241,7 @@ const pageTitle = "FestiGeek Canarias 2025";
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7)); /* 👈 AÑADE: gradiente oscuro */
+  background: linear-gradient(to bottom, rgba(42, 200, 171, 0.1), rgba(55, 58, 131, 0.3)); /* 👈 AÑADE: gradiente oscuro */
   z-index: 0;
 }
 
@@ -1251,8 +1253,8 @@ const pageTitle = "FestiGeek Canarias 2025";
 /* Mejorar el texto para que se vea sobre la foto */
 .guest-content .guest-name {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 800;
+  font-size: 18px;
+  font-weight: 500;
   margin-bottom: 4px;
   color: var(--color-blanco); /* 👈 CAMBIA: a blanco */
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 👈 AÑADE: sombra */
@@ -1271,7 +1273,7 @@ const pageTitle = "FestiGeek Canarias 2025";
 #invitados {
   position: relative;
   overflow: hidden;
-  background: url('/images/bg-invitados.jpg') center/cover no-repeat;
+  background: url('public/images/bg-invitados.jpg') center/cover no-repeat;
   padding: var(--spacing-3xl) 0;
   border-top: 3px solid var(--color-negro);
   border-bottom: 3px solid var(--color-negro);
@@ -1282,7 +1284,7 @@ const pageTitle = "FestiGeek Canarias 2025";
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(142, 168, 173, 0.7); /* opacidad ajustable */
+  background: rgba(181, 180, 177, 0.7); /* opacidad ajustable */
   z-index: 0;
 }
 
@@ -1507,10 +1509,10 @@ const pageTitle = "FestiGeek Canarias 2025";
   }
 }
 /* Backgrounds para Guest Cards */
-.guest-bg-1 { background: url('/images/img_2.jpg') center/cover no-repeat; }
-.guest-bg-2 { background: url('/images/img_2.webp') center/cover no-repeat; }
-.guest-bg-3 { background: url('/images/img_4.jpg') center/cover no-repeat; }
-.guest-bg-4 { background: url('/images/img_3.webp') center/cover no-repeat; }
+.guest-bg-1 { background: url('public/images/img_2.jpg') center/cover no-repeat; }
+.guest-bg-2 { background: url('public/images/img_2.webp') center/cover no-repeat; }
+.guest-bg-3 { background: url('public/images/img_4.jpg') center/cover no-repeat; }
+.guest-bg-4 { background: url('public/images/img_3.webp') center/cover no-repeat; }
 
   </style>
 </head>
@@ -1659,7 +1661,7 @@ const pageTitle = "FestiGeek Canarias 2025";
 <!-- FEATURED GUESTS - TODO EN EL MISMO CAJÓN -->
 <section id="invitados" style="padding: var(--spacing-3xl) 0; background-color: var(--color-blanco); border-top: 3px solid var(--color-negro); border-bottom: 3px solid var(--color-negro);">
   <div class="container">
-    <h2 style="text-align: center; margin-bottom: var(--spacing-2xl);">
+    <h2 style="text-align: center; margin-bottom: var(--spacing-2xl); text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);">
       FEATURED GUESTS & ARTISTS
     </h2>
     
@@ -1798,15 +1800,15 @@ const pageTitle = "FestiGeek Canarias 2025";
 <div class="legend">
   <div class="legend-item">
     <div class="legend-icon" style="background-color: var(--color-rojo);" data-number="1"></div>
-    <span>Gaming Arena</span>
+    <span class="legend-title">Gaming Arena</span>
   </div>
   <div class="legend-item">
     <div class="legend-icon" style="background-color: var(--color-marfil);" data-number="2"></div>
-    <span>Panels & Showcases</span>
+    <span class="legend-title">Panels & Showcases</span>
   </div>
   <div class="legend-item">
     <div class="legend-icon" style="background-color: var(--color-azul);" data-number="3"></div>
-    <span>Cosplay & Photoshoots</span>
+    <span class="legend-title">Cosplay & Photoshoots</span>
   </div>
 </div>
 </section>
