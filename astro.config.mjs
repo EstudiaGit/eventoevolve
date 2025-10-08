@@ -19,6 +19,9 @@ export default defineConfig({
       applyBaseStyles: true,
     }),
   ],
+
+  // Excluir rutas de API de la compilación estática
+  exclude: ['src/pages/api/**'],
   
   // Configuración del servidor de desarrollo local
   server: {
