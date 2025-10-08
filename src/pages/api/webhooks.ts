@@ -1,8 +1,8 @@
 // src/pages/api/webhooks.ts
 import type { APIRoute } from 'astro';
 import Stripe from 'stripe';
-import { db } from '../../db/client';
-import { pedidos } from '../../db/schema';
+// import { db } from '../../db/client';
+// import { pedidos } from '../../db/schema';
 
 // Inicializar Stripe
 const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY || '', {
@@ -31,7 +31,7 @@ export const POST: APIRoute = async ({ request }) => {
   } catch (err) {
     console.error('⚠️ Error verificando firma del webhook:', err);
     return new Response(
-      `Webhook Error: ${err instanceof Error ? err.message : 'Unknown error'}`, 
+      `Webhook Error: ${err instanceof Error ? err.message : 'Unknown error'}`,
       { status: 400 }
     );
   }
@@ -41,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        
+
         console.log('✅ Checkout completado:', {
           sessionId: session.id,
           email: session.customer_details?.email,
@@ -50,6 +50,7 @@ export const POST: APIRoute = async ({ request }) => {
 
         // Guardar el pedido en la base de datos
         try {
+          const { db, pedidos } = await import('../../db/client');
           await db.insert(pedidos).values({
             stripeSessionId: session.id,
             stripePaymentIntentId: session.payment_intent as string || '',
@@ -72,10 +73,9 @@ export const POST: APIRoute = async ({ request }) => {
           // No retornar error para no hacer que Stripe reintente
           // En producción, podrías enviar esto a un sistema de monitoreo
         }
-        
+
         break;
       }
-
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
         console.log('💰 Pago exitoso:', paymentIntent.id);
