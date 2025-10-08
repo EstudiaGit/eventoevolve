@@ -1506,6 +1506,17 @@ const pageTitle = "FestiGeek Canarias 2025";
     font-size: 12px;
   }
 }
+/* Backgrounds para Guest Cards */
+.guest-bg-1 { background-image: url('/images/img_2.jpg'); }
+.guest-bg-2 { background-image: url('/images/img_2.webp'); }
+.guest-bg-3 { background-image: url('/images/img_4.jpg'); }
+.guest-bg-4 { background-image: url('/images/img_3.webp'); }
+
+.guest-bg-1, .guest-bg-2, .guest-bg-3, .guest-bg-4 {
+  background-size: cover;
+  background-position: center;
+}
+
   </style>
 </head>
 <body>
@@ -1666,7 +1677,7 @@ const pageTitle = "FestiGeek Canarias 2025";
             <!-- TODO DENTRO DEL MISMO CAJÓN -->
             <div class="guest-image">
               <!-- Contenido visible por defecto -->
-        <div class="guest-content with-photo" style={`background-image: url('${import.meta.env.BASE_URL}images/img_2.jpg'); background-size: cover; background-position: center;`}>
+        <div class="guest-content with-photo guest-bg-1">
                 <div class="guest-placeholder">👤</div>
                 <h3 class="guest-name">Joel Gutiérrez</h3>
                 <p class="guest-role">Doblador de Anime</p>
@@ -1698,7 +1709,7 @@ const pageTitle = "FestiGeek Canarias 2025";
         <div class="guest-card-inner">
           <div class="guest-card-front">
             <div class="guest-image">
-        <div class="guest-content with-photo" style={`background-image: url('${import.meta.env.BASE_URL}images/img_2.webp'); background-size: cover; background-position: center;`}>
+        <div class="guest-content with-photo guest-bg-2">
                 <div class="guest-placeholder">👤</div>
                 <h3 class="guest-name">Marina López</h3>
                 <p class="guest-role">Artista de Cómic</p>
@@ -1730,7 +1741,7 @@ const pageTitle = "FestiGeek Canarias 2025";
           <div class="guest-card-front">
             <div class="guest-image">
               
-        <div class="guest-content with-photo" style={`background-image: url('${import.meta.env.BASE_URL}images/img_4.jpg'); background-size: cover; background-position: center;`}>
+        <div class="guest-content with-photo guest-bg-3">
                 <div class="guest-placeholder">👤</div>
                 <h3 class="guest-name">Carlos Ruiz</h3>
                 <p class="guest-role">Streamer Gaming</p>
@@ -1762,7 +1773,7 @@ const pageTitle = "FestiGeek Canarias 2025";
   <div class="guest-card-inner">
     <div class="guest-card-front">
       <div class="guest-image">
-        <div class="guest-content with-photo" style={`background-image: url('${import.meta.env.BASE_URL}images/img_3.webp'); background-size: cover; background-position: center;`}>
+        <div class="guest-content with-photo guest-bg-4">
           <div class="guest-placeholder">👤</div> <!-- Se ocultará con la clase with-photo -->
           <h3 class="guest-name">Claudia Cristiani</h3>
           <p class="guest-role">Cosplayer Pro</p>
