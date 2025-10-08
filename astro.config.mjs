@@ -21,7 +21,7 @@ export default defineConfig({
   ],
 
   // Excluir rutas de API de la compilación estática
-  exclude: ['src/pages/api/**'],
+  exclude: ['**/api/**'],
   
   // Configuración del servidor de desarrollo local
   server: {
