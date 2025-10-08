@@ -8,7 +8,7 @@ export default defineConfig({
   site: "https://EstudiaGit.github.io",
   
   // Base path - debe coincidir con el nombre del repositorio
-  base: "/eventotickets",
+  base: "/eventoevolve",
   
   // Output estático para GitHub Pages
   output: "static",
