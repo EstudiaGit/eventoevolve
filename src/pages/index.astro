@@ -16,6 +16,8 @@ const pageTitle = "FestiGeek Canarias 2025";
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
   <style>
     :root {
       /* Colores Neutros */
@@ -32,8 +34,10 @@ const pageTitle = "FestiGeek Canarias 2025";
       --color-amarillo: #FFD64D;
       --color-naranja: #FF7A00;
       --color-coral: #FF4F6D;
+      --color-rojo: #f40404;
       --color-lavanda: #B79BF5;
       --color-cian-claro: #7CF3E9;
+      --color-azul: #0051b3;
       
       /* Espaciado */
       --spacing-xs: 8px;
@@ -398,7 +402,7 @@ const pageTitle = "FestiGeek Canarias 2025";
       left: 0;
       width: 100%;
       height: 140%;
-      background-image: url('/images/comic-texture.png'); /* 👈 Aquí pones tu imagen */
+      background-image: url('public/images/comic-texture.png'); /* 👈 Aquí pones tu imagen */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -555,7 +559,7 @@ const pageTitle = "FestiGeek Canarias 2025";
   left: 0;
   right: 0;
   height: 0;
-  background: linear-gradient(135deg, rgba(255, 122, 0, 0.96) 0%, rgba(255, 140, 50, 0.94) 100%);
+  background: linear-gradient(135deg, rgba(255, 44, 44, 0.6) 0%, rgba(6, 29, 160, 0.7) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -659,34 +663,56 @@ const pageTitle = "FestiGeek Canarias 2025";
 
 
 
-    /* Legend mejorada */
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: var(--spacing-md);
-      margin-top: var(--spacing-xl);
-      flex-wrap: wrap;
-    }
+ /* Legend simple y profesional */
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-3xl);
+  margin-top: var(--spacing-lg);
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-      padding: 8px 16px;
-      background-color: var(--color-blanco);
-      border: 2px solid var(--color-negro);
-      font-weight: 600;
-      font-size: 14px;
-    }
+.legend-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3xl);
+  padding: var(--spacing-md);
+  background-color: var(--color-naranja);
+  border: 3px solid var(--color-negro);
+  box-shadow: 4px 4px 0 var(--color-negro);
+  transition: all 300ms;
+}
 
-    .legend-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--color-negro);
-      flex-shrink: 0;
-    }
+.legend-item:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-negro);
+}
 
+.legend-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  border: 3px solid var(--color-negro);
+  flex-shrink: 0;
+}
+
+.legend-item span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .legend {
+    flex-direction: column;
+  }
+}
     .hero-content {
       text-align: center;
       position: relative;
@@ -833,6 +859,309 @@ const pageTitle = "FestiGeek Canarias 2025";
       font-size: 14px;
     }
 
+    /* Footer con look más pro */
+.site-footer {
+  position: relative;
+  /* margin-top: var(--spacing-sx); */
+  color: var(--color-marfil);
+  background: linear-gradient(160deg, #111111 0%, #181b27 45%, #111111 100%);
+  border-top: 4px solid var(--color-turquesa);
+  overflow: hidden;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(135deg, rgba(46, 231, 211, 0.08) 0%, rgba(183, 155, 245, 0.08) 100%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.site-footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.05) 0,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Cinta superior */
+.footer-ribbon {
+  background: linear-gradient(90deg, var(--color-turquesa) 0%, var(--color-coral) 100%);
+  color: var(--color-negro);
+  border-bottom: 3px solid var(--color-negro);
+  padding: var(--spacing-sm) 0;
+}
+
+.ribbon-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+
+.ribbon-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: var(--color-negro);
+  color: var(--color-marfil);
+  border: 2px solid var(--color-marfil);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Core del footer */
+.footer-core {
+  position: relative;
+  z-index: 1;
+  padding: var(--spacing-2xl) 0;
+  display: grid;
+  gap: var(--spacing-xl);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.footer-brand {
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.footer-logo {
+  display: inline-block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  border: 3px solid var(--color-marfil);
+  background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+}
+
+.footer-tagline {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.footer-social-link {
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--color-marfil);
+  color: var(--color-marfil);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  border-radius: 50%;
+  transition: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-social-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--color-turquesa), var(--color-lavanda));
+  opacity: 0;
+  transition: opacity 220ms;
+}
+
+.footer-social-link:hover,
+.footer-social-link:focus-visible {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+}
+
+.footer-social-link:hover::before,
+.footer-social-link:focus-visible::before {
+  opacity: 1;
+}
+
+.footer-social-link i {
+  position: relative;
+  z-index: 1;
+}
+
+/* Secciones */
+.footer-section h4 {
+  color: var(--color-turquesa);
+  margin-bottom: var(--spacing-sm);
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.footer-links {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 200ms, transform 200ms;
+  position: relative;
+}
+
+.footer-links a::before {
+  content: '⟶';
+  margin-right: 8px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: transform 200ms, opacity 200ms;
+  color: var(--color-lima);
+}
+
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  color: var(--color-blanco);
+  transform: translateX(4px);
+}
+
+.footer-links a:hover::before,
+.footer-links a:focus-visible::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Newsletter */
+.footer-newsletter p {
+  color: rgba(255,255,255,0.75);
+  font-size: 14px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.newsletter-form input {
+  flex: 1 1 220px;
+  padding: 14px 16px;
+  border: 2px solid rgba(255,255,255,0.3);
+  background-color: rgba(255,255,255,0.07);
+  color: var(--color-marfil);
+  font-size: 14px;
+  transition: border-color 200ms, background-color 200ms;
+}
+
+.newsletter-form input::placeholder {
+  color: rgba(255,255,255,0.6);
+}
+
+.newsletter-form input:focus {
+  border-color: var(--color-turquesa);
+  background-color: rgba(255,255,255,0.12);
+  outline: none;
+}
+
+.btn.btn-sm {
+  padding: 12px 22px;
+  font-size: 12px;
+  letter-spacing: 1.2px;
+}
+
+.footer-newsletter .btn-primary {
+  border-width: 2px;
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+}
+
+.footer-newsletter .btn-primary:hover {
+  box-shadow: 5px 5px 0 rgba(0,0,0,0.45);
+}
+
+.newsletter-note {
+  display: block;
+  margin-top: 10px;
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid rgba(255,255,255,0.15);
+  padding: var(--spacing-md) 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
+
+.footer-bottom a {
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  transition: color 200ms;
+}
+
+.footer-bottom a:hover,
+.footer-bottom a:focus-visible {
+  color: var(--color-turquesa);
+}
+
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .footer-core {
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-bottom-right {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ribbon-inner {
+    gap: var(--spacing-sm);
+  }
+
+  .ribbon-inner p {
+    font-size: 14px;
+  }
+}
+
     /* Accesibilidad */
     .sr-only {
       position: absolute;
@@ -880,6 +1209,301 @@ const pageTitle = "FestiGeek Canarias 2025";
     width: 45px;
     height: 45px;
     font-size: 20px;
+  }
+}
+
+/* Mejora para fotos de fondo en guest cards */
+.guest-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end; /* 👈 CAMBIA ESTO: de center a flex-end */
+  padding: var(--spacing-md);
+  padding-bottom: var(--spacing-sm); /* 👈 AÑADE: menos padding abajo */
+  background: linear-gradient(135deg, var(--color-borde-suave), var(--color-marfil));
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ocultar el placeholder cuando hay foto */
+.guest-content.with-photo .guest-placeholder {
+  display: none;
+}
+
+/* Ajustar el gradiente para que sea más oscuro abajo */
+.guest-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.7)); /* 👈 AÑADE: gradiente oscuro */
+  z-index: 0;
+}
+
+.guest-content > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Mejorar el texto para que se vea sobre la foto */
+.guest-content .guest-name {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  color: var(--color-blanco); /* 👈 CAMBIA: a blanco */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 👈 AÑADE: sombra */
+}
+
+.guest-content .guest-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-marfil); /* 👈 CAMBIA: a color claro */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 👈 AÑADE: sombra */
+}
+
+/* invitados */
+#invitados {
+  position: relative;
+  overflow: hidden;
+  background: url('/public/images/bg-invitados.jpg') center/cover no-repeat;
+  padding: var(--spacing-3xl) 0;
+  border-top: 3px solid var(--color-negro);
+  border-bottom: 3px solid var(--color-negro);
+  color: var(--color-blanco);
+}
+
+#invitados::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(142, 168, 173, 0.7); /* opacidad ajustable */
+  z-index: 0;
+}
+
+#invitados > * {
+  position: relative;
+  z-index: 1; /* garantiza que el contenido quede por encima */
+}
+
+/* Info banner elevado */
+.info-banner {
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-3xl) 0;
+  background: radial-gradient(120% 120% at 20% 20%, rgba(46, 231, 211, 0.18), transparent 60%),
+              linear-gradient(145deg, #18243c 0%, #101320 55%, #0c0e18 100%);
+  color: var(--color-marfil);
+  border-bottom: 4px solid var(--color-turquesa);
+}
+
+.info-banner::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background: conic-gradient(from 45deg, rgba(255, 122, 0, 0.12), rgba(183, 155, 245, 0.2), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  pointer-events: none;
+  transform: rotate(8deg);
+}
+
+.info-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.04) 0,
+      rgba(255, 255, 255, 0.04) 1px,
+      transparent 1px,
+      transparent 18px
+    );
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.info-wrapper {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+.info-heading {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.info-pretitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  justify-self: center;
+}
+
+.info-heading h2 {
+  font-size: clamp(34px, 6vw, 52px);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.info-description {
+  color: rgba(255,255,255,0.75);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.info-cards {
+  display: grid;
+  gap: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.info-card {
+  position: relative;
+  padding: var(--spacing-lg);
+  border: 3px solid rgba(255,255,255,0.18);
+  background: linear-gradient(145deg, rgba(12, 14, 24, 0.8), rgba(12, 14, 24, 0.55));
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.6);
+  display: grid;
+  gap: var(--spacing-sm);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+  overflow: hidden;
+}
+
+.info-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(183, 155, 245, 0.25), transparent 55%);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.info-card:hover,
+.info-card:focus-within {
+  transform: translate(-4px, -4px);
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.65);
+  border-color: var(--color-turquesa);
+}
+
+.info-card:hover::before,
+.info-card:focus-within::before {
+  opacity: 1;
+}
+
+.info-card-icon {
+  font-size: 32px;
+}
+
+.info-card h3 {
+  font-size: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-marfil);
+}
+
+.info-card p {
+  color: rgba(255,255,255,0.72);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.info-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-turquesa);
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  transition: gap 180ms ease, color 180ms ease;
+  margin-top: 4px;
+}
+
+.info-card-link span {
+  transition: transform 180ms ease;
+}
+
+.info-card-link:hover,
+.info-card-link:focus-visible {
+  color: var(--color-lima);
+}
+
+.info-card-link:hover span,
+.info-card-link:focus-visible span {
+  transform: translateX(4px);
+}
+
+.info-card-badge,
+.info-card-cta {
+  align-self: flex-start;
+  margin-top: auto;
+  padding: 6px 14px;
+  border: 2px solid rgba(255,255,255,0.18);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.85);
+  background: linear-gradient(135deg, rgba(46, 231, 211, 0.2), rgba(46, 231, 211, 0.05));
+}
+
+.info-card-cta {
+  background: linear-gradient(135deg, rgba(255, 122, 0, 0.25), rgba(255, 122, 0, 0.08));
+  border-color: rgba(255, 122, 0, 0.4);
+}
+
+.info-actions {
+  text-align: center;
+  display: grid;
+  gap: var(--spacing-sm);
+  justify-items: center;
+}
+
+.info-note {
+  color: rgba(255,255,255,0.6);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Responsivo */
+@media (max-width: 767px) {
+  .info-banner {
+    padding: var(--spacing-2xl) 0;
+  }
+
+  .info-card {
+    padding: var(--spacing-md);
+  }
+
+  .info-card h3 {
+    font-size: 18px;
+  }
+
+  .info-note {
+    font-size: 12px;
   }
 }
   </style>
@@ -956,9 +1580,9 @@ const pageTitle = "FestiGeek Canarias 2025";
             <li>Meet & Greet básico</li>
             <li>Zona gaming</li>
           </ul>
-          <a href="/eventotickets/comprar/day-pass" class="btn btn-primary" style="width: 100%;">
+          <button class="btn btn-primary buy-ticket" data-ticket-type="day-pass" style="width: 100%;">
             BUY NOW
-          </a>
+          </button>
         </div>
 
         <!-- Weekend Pass - DESTACADO -->
@@ -985,9 +1609,9 @@ const pageTitle = "FestiGeek Canarias 2025";
             <li>Acceso a talleres</li>
             <li>Meet & Greet premium</li>
           </ul>
-          <a href="/eventotickets/comprar/weekend-pass" class="btn btn-primary" style="width: 100%;">
+          <button class="btn btn-primary buy-ticket" data-ticket-type="weekend-pass" style="width: 100%;">
             BUY NOW
-          </a>
+          </button>
         </div>
 
         <!-- VIP Experience -->
@@ -1009,9 +1633,9 @@ const pageTitle = "FestiGeek Canarias 2025";
             <li>Pack exclusivo de regalos</li>
             <li>Foto profesional</li>
           </ul>
-          <a href="/eventotickets/comprar/vip" class="btn btn-primary" style="width: 100%;">
+          <button class="btn btn-primary buy-ticket" data-ticket-type="vip" style="width: 100%;">
             BUY NOW
-          </a>
+          </button>
         </div>
 
       </div>
@@ -1042,7 +1666,7 @@ const pageTitle = "FestiGeek Canarias 2025";
             <!-- TODO DENTRO DEL MISMO CAJÓN -->
             <div class="guest-image">
               <!-- Contenido visible por defecto -->
-              <div class="guest-content">
+        <div class="guest-content with-photo" style="background-image: url('/public/images/img_2.jpg'); background-size: cover; background-position: center;">
                 <div class="guest-placeholder">👤</div>
                 <h3 class="guest-name">Joel Gutiérrez</h3>
                 <p class="guest-role">Doblador de Anime</p>
@@ -1074,7 +1698,7 @@ const pageTitle = "FestiGeek Canarias 2025";
         <div class="guest-card-inner">
           <div class="guest-card-front">
             <div class="guest-image">
-              <div class="guest-content">
+        <div class="guest-content with-photo" style="background-image: url('/public/images/img_2.webp'); background-size: cover; background-position: center;">
                 <div class="guest-placeholder">👤</div>
                 <h3 class="guest-name">Marina López</h3>
                 <p class="guest-role">Artista de Cómic</p>
@@ -1105,11 +1729,13 @@ const pageTitle = "FestiGeek Canarias 2025";
         <div class="guest-card-inner">
           <div class="guest-card-front">
             <div class="guest-image">
-              <div class="guest-content">
+              
+        <div class="guest-content with-photo" style="background-image: url('/public/images/img_4.jpg'); background-size: cover; background-position: center;">
                 <div class="guest-placeholder">👤</div>
                 <h3 class="guest-name">Carlos Ruiz</h3>
                 <p class="guest-role">Streamer Gaming</p>
               </div>
+              
               
               <div class="guest-card-overlay">
                 <div class="overlay-content">
@@ -1133,110 +1759,238 @@ const pageTitle = "FestiGeek Canarias 2025";
 
       <!-- Guest 4 -->
       <div class="guest-card">
-        <div class="guest-card-inner">
-          <div class="guest-card-front">
-            <div class="guest-image">
-              <div class="guest-content">
-                <div class="guest-placeholder">👤</div>
-                <h3 class="guest-name">Ana Martín</h3>
-                <p class="guest-role">Cosplayer Pro</p>
-              </div>
-              
-              <div class="guest-card-overlay">
-                <div class="overlay-content">
-                  <h3 class="guest-name-overlay">Ana Martín</h3>
-                  <p class="guest-role-overlay">Cosplayer Pro</p>
-                  
-                  <div class="social-links">
-                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
-                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
-                    </a>
-                    <a href="https://tiktok.com" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
-                      <span class="social-icon"><i class="fa-brands fa-tiktok"></i></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
+  <div class="guest-card-inner">
+    <div class="guest-card-front">
+      <div class="guest-image">
+        <div class="guest-content with-photo" style="background-image: url('/public/images/img_3.webp'); background-size: cover; background-position: center;">
+          <div class="guest-placeholder">👤</div> <!-- Se ocultará con la clase with-photo -->
+          <h3 class="guest-name">Claudia Cristiani</h3>
+          <p class="guest-role">Cosplayer Pro</p>
+        </div>
+        
+        <div class="guest-card-overlay">
+          <div class="overlay-content">
+            <h3 class="guest-name-overlay">Claudia Cristiani</h3>
+            <p class="guest-role-overlay">Cosplayer Pro</p>
+            
+            <div class="social-links">
+              <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
+              </a>
+              <a href="https://tiktok.com" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
+                <span class="social-icon"><i class="fa-brands fa-tiktok"></i></span>
+              </a>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
 
+  <!-- Categories Legend -->
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-icon" style="background-color: var(--color-rojo);" data-number="1"></div>
+    <span>Gaming Arena</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-icon" style="background-color: var(--color-marfil);" data-number="2"></div>
+    <span>Panels & Showcases</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-icon" style="background-color: var(--color-azul);" data-number="3"></div>
+    <span>Cosplay & Photoshoots</span>
+  </div>
+</div>
+</section>
+
+  <!-- INFO SECTION -->
+<section class="info-banner" id="ubicacion">
+  <div class="container info-wrapper">
+    <div class="info-heading">
+      <span class="info-pretitle">FestiGeek Canarias 2025</span>
+      <h2>Las Palmas de Gran Canaria te espera</h2>
+      <p class="info-description">
+        Dos días repletos de anime, gaming competitivo, cosplay y cultura pop en el corazón del Atlántico.
+      </p>
     </div>
 
-    <!-- Categories Legend -->
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-icon" style="background-color: var(--color-turquesa);"></div>
-        <span>Gaming Arena</span>
+    <div class="info-cards" role="list">
+      <article class="info-card" role="listitem">
+        <span class="info-card-icon">📍</span>
+        <h3>Recinto Ferial de Canarias</h3>
+        <p>Pabellón 7 · A un paso del centro y con conexiones para todo el archipiélago.</p>
+        <a class="info-card-link" href="https://maps.app.goo.gl/recintoferialcanarias" target="_blank" rel="noopener">
+          Ver mapa <span aria-hidden="true">→</span>
+        </a>
+      </article>
+
+      <article class="info-card" role="listitem">
+        <span class="info-card-icon">📅</span>
+        <h3>15 · 16 marzo 2025</h3>
+        <p>Sábado y domingo de 10:00 a 21:00. Shows en vivo, torneos y sorpresas non-stop.</p>
+        <span class="info-card-badge">Weekend Pass Ready</span>
+      </article>
+
+      <article class="info-card" role="listitem">
+        <span class="info-card-icon">⚡</span>
+        <h3>Experiencia 360°</h3>
+        <p>Artist Alley, zona retro, photo ops, meet & greet y mucho más esperando por ti.</p>
+        <span class="info-card-cta">¡Planifica tu ruta!</span>
+      </article>
+    </div>
+
+    <div class="info-actions">
+      <div class="cta-group">
+        <a href="/eventotickets/#tickets" class="btn btn-primary">COMPRAR TICKETS</a>
+        <a href="/eventotickets/info" class="btn btn-outline">MÁS INFORMACIÓN</a>
       </div>
-      <div class="legend-item">
-        <div class="legend-icon" style="background-color: var(--color-naranja);"></div>
-        <span>Panels & Showcases</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-icon" style="background-color: var(--color-lavanda);"></div>
-        <span>Cosplay & Photoshoots</span>
-      </div>
+      <p class="info-note">
+        Tip: consigue tus pases antes del 1 de marzo y desbloquea merchandising exclusivo.
+      </p>
     </div>
   </div>
 </section>
 
-  <!-- INFO SECTION -->
-  <section class="info-banner" id="ubicacion">
-    <div class="container">
-      <h2 style="margin-bottom: var(--spacing-lg);">
-        Las Palmas de Gran Canaria te espera
-      </h2>
-      <p class="info-detail">
-        <span style="font-size: 24px;">📍</span>
-        <span>Recinto Ferial de Canarias · Pabellón 7</span>
-      </p>
-      <p class="info-detail" style="font-size: 18px; margin-bottom: var(--spacing-lg);">
-        <span style="font-size: 20px;">📅</span>
-        <span>15-16 de Marzo 2025 · 10:00 - 21:00</span>
-      </p>
-      <div class="cta-group">
-        <a href="/eventotickets/#tickets" class="btn btn-primary">
-          COMPRAR TICKETS
-        </a>
-        <a href="/eventotickets/info" class="btn btn-outline">
-          MÁS INFORMACIÓN
-        </a>
+  <!-- FOOTER -->
+<footer class="site-footer">
+  <!-- Cinta superior (opcional) -->
+  <div class="footer-ribbon">
+    <div class="container ribbon-inner">
+      <span class="ribbon-tag">¡Atención, geeks!</span>
+      <p>Entradas Early Bird disponibles hasta el 31 de mayo. ¡No te quedes fuera!</p>
+      <a class="btn btn-outline btn-sm" href="/eventotickets/entradas">Compra ahora</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="footer-core">
+      <!-- Logo o texto de marca -->
+      <div class="footer-brand">
+        <span class="footer-logo">FestiGeek Canarias</span>
+        <p class="footer-tagline">Donde la energía pop, el anime y el gaming chocan en vivo.</p>
+
+        <div class="footer-social" aria-label="Redes sociales">
+          <a href="https://instagram.com/festigeekcanarias" class="footer-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://tiktok.com/@festigeekcanarias" class="footer-social-link" target="_blank" rel="noopener" aria-label="TikTok">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+          <a href="https://twitter.com/festigeekcan" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a href="https://facebook.com/festigeekcanarias" class="footer-social-link" target="_blank" rel="noopener" aria-label="Facebook">
+            <i class="fa-brands fa-facebook"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bloque legal -->
+      <div class="footer-section">
+        <h4>Términos & Condiciones</h4>
+        <ul class="footer-links">
+          <li><a href="/eventotickets/terminos">Condiciones de venta</a></li>
+          <li><a href="/eventotickets/politicas">Política de reembolsos</a></li>
+          <li><a href="/eventotickets/faq">Preguntas frecuentes</a></li>
+        </ul>
+      </div>
+
+      <!-- Bloque institucional -->
+      <div class="footer-section">
+        <h4>Info del Evento</h4>
+        <ul class="footer-links">
+          <li><a href="/eventotickets/programa">Programa y horarios</a></li>
+          <li><a href="/eventotickets/speakers">Invitados confirmados</a></li>
+          <li><a href="/eventotickets/venue">Cómo llegar</a></li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div class="footer-section footer-newsletter">
+        <h4>Newsletter</h4>
+        <p>Recibe anuncios exclusivos, drop de merch y sorpresas pre-evento.</p>
+        <form class="newsletter-form" action="/eventotickets/newsletter" method="post">
+          <label for="newsletter-email" class="sr-only">Correo electrónico</label>
+          <input type="email" id="newsletter-email" name="email" placeholder="tuemail@ejemplo.com" required>
+          <button type="submit" class="btn btn-primary btn-sm">Quiero noticias</button>
+        </form>
+        <small class="newsletter-note">Prometemos cero spam, solo hype.</small>
       </div>
     </div>
-  </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        
-        <div class="footer-section">
-          <h4>Términos & Condiciones</h4>
-          <p><a href="/eventotickets/terminos">Consulta nuestros términos y condiciones de venta</a></p>
-        </div>
-
-        <div class="footer-section">
-          <h4>Política de Privacidad</h4>
-          <p><a href="/eventotickets/privacidad">Tu privacidad es importante para nosotros</a></p>
-        </div>
-
-        <div class="footer-section">
-          <h4>Contacto</h4>
-          <p>
-            <a href="mailto:info@festigeekcanarias.com">info@festigeekcanarias.com</a><br>
-            <a href="tel:+34922123456">+34 922 123 456</a>
-          </p>
-        </div>
-
-      </div>
-      
-      <div class="footer-bottom">
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">
         <p>© 2025 FestiGeek Canarias. Todos los derechos reservados.</p>
       </div>
+      <div class="footer-bottom-right">
+        <a href="/eventotickets/privacidad">Política de privacidad</a>
+        <span aria-hidden="true">•</span>
+        <a href="/eventotickets/cookies">Política de cookies</a>
+        <span aria-hidden="true">•</span>
+        <a href="mailto:info@festigeekcanarias.com">info@festigeekcanarias.com</a>
+      </div>
     </div>
-  </footer>
+  </div>
+</footer>
+
+  <!-- Script de integración con Stripe -->
+  <script>
+    // Inicializar Stripe (la clave pública se carga desde las variables de entorno)
+    const stripe = Stripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+    // Seleccionar todos los botones de compra
+    const buyButtons = document.querySelectorAll('.buy-ticket');
+
+    buyButtons.forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const ticketType = e.target.dataset.ticketType;
+        
+        // Deshabilitar el botón y mostrar loading
+        button.disabled = true;
+        button.textContent = 'PROCESANDO...';
+
+        try {
+          // Llamar a nuestra API para crear la sesión de checkout
+          const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ticketType: ticketType,
+              quantity: 1,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Error al procesar la solicitud');
+          }
+
+          // Redirigir a Stripe Checkout
+          const { error } = await stripe.redirectToCheckout({
+            sessionId: data.sessionId,
+          });
+
+          if (error) {
+            console.error('Error de Stripe:', error);
+            alert('Error al redireccionar al checkout: ' + error.message);
+          }
+
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al procesar la compra. Por favor, intenta de nuevo.');
+          
+          // Restaurar el botón
+          button.disabled = false;
+          button.textContent = 'BUY NOW';
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>

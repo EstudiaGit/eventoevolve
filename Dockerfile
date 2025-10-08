@@ -36,7 +36,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 EXPOSE 4321
-CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+# Usar configuración local para desarrollo con SSR y Stripe
+CMD ["npm", "run", "dev:local", "--", "--host", "0.0.0.0"]
 
 # ────────────────────────────────────────────────
 # STAGE 4: Producción (opcional, para después)
