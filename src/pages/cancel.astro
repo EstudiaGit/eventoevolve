@@ -1,0 +1,182 @@
+---
+// src/pages/cancel.astro
+---
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compra Cancelada - FestiGeek Canarias 2025</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --color-marfil: #F7F4EA;
+      --color-negro: #111111;
+      --color-coral: #FF4F6D;
+      --color-naranja: #FF7A00;
+      --spacing-lg: 32px;
+      --spacing-xl: 48px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-naranja) 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-lg);
+    }
+
+    .container {
+      background-color: var(--color-marfil);
+      border: 4px solid var(--color-negro);
+      padding: var(--spacing-xl);
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 8px 8px 0 var(--color-negro);
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 80px;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 900;
+      font-size: 42px;
+      color: var(--color-negro);
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+      color: var(--color-negro);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .info-box {
+      background-color: #fff;
+      border: 3px solid var(--color-negro);
+      padding: 24px;
+      margin: var(--spacing-lg) 0;
+      text-align: left;
+    }
+
+    .info-box h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      margin-bottom: 12px;
+      color: var(--color-negro);
+    }
+
+    .info-box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .info-box li {
+      padding: 8px 0;
+      padding-left: 24px;
+      position: relative;
+    }
+
+    .info-box li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 16px 32px;
+      text-decoration: none;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border: 2px solid var(--color-negro);
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background-color: var(--color-negro);
+      color: var(--color-marfil);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 var(--color-negro);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      color: var(--color-negro);
+    }
+
+    .btn-outline:hover {
+      background-color: var(--color-negro);
+      color: var(--color-marfil);
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 var(--color-negro);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">❌</div>
+    
+    <h1>Compra Cancelada</h1>
+    
+    <p><strong>No te preocupes, no se ha realizado ningún cargo.</strong></p>
+    <p>Tu compra ha sido cancelada y no se procesó ningún pago.</p>
+
+    <div class="info-box">
+      <h2>💡 ¿Tuviste algún problema?</h2>
+      <ul>
+        <li>Puedes intentar comprar de nuevo cuando quieras</li>
+        <li>Las entradas están disponibles hasta agotar stock</li>
+        <li>Si necesitas ayuda, contáctanos por email</li>
+        <li>Aceptamos todas las tarjetas de crédito y débito</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h2>📧 ¿Necesitas Ayuda?</h2>
+      <p style="margin: 0;">
+        Si encontraste algún problema durante el proceso de compra, 
+        escríbenos a <strong>info@festigeekcanarias.com</strong> y 
+        te ayudaremos a completar tu pedido.
+      </p>
+    </div>
+
+    <div class="btn-group">
+      <a href="/" class="btn btn-primary">Volver al Inicio</a>
+      <a href="/#tickets" class="btn btn-outline">Intentar de Nuevo</a>
+    </div>
+  </div>
+</body>
+</html>

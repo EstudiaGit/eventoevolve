@@ -4,8 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "dev:local": "astro dev --config astro.config.local.mjs",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "astro build --base /eventoevolve",
+    "build:local": "astro build --config astro.config.local.mjs",
+    "build:pages": "astro build --config astro.config.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "db:generate": "drizzle-kit generate:pg",

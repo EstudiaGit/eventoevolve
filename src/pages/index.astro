@@ -9,1234 +9,2210 @@ const pageTitle = "FestiGeek Canarias 2025";
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{pageTitle}</title>
-  
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
   <!-- Iconos -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Stripe.js -->
+  <script src="https://js.stripe.com/v3/"></script>
+
   <style>
-    :root {
-      /* Colores Neutros */
-      --color-marfil: #F7F4EA;
-      --color-negro: #111111;
-      --color-gris: #5A5A5A;
-      --color-borde-suave: #E7E2D7;
-      --color-blanco: #FFFFFF;
-      
-      /* Colores de Acento */
-      --color-turquesa: #2EE7D3;
-      --color-menta: #23D9B3;
-      --color-lima: #C9F86A;
-      --color-amarillo: #FFD64D;
-      --color-naranja: #FF7A00;
-      --color-coral: #FF4F6D;
-      --color-lavanda: #B79BF5;
-      --color-cian-claro: #7CF3E9;
-      
-      /* Espaciado */
-      --spacing-xs: 8px;
-      --spacing-sm: 16px;
-      --spacing-md: 24px;
-      --spacing-lg: 32px;
-      --spacing-xl: 48px;
-      --spacing-2xl: 64px;
-      --spacing-3xl: 96px;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--color-marfil);
-      color: var(--color-negro);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-
-    h1, h2, h3, h4 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 800;
-      line-height: 1.2;
-    }
-
-    h1 {
-      font-size: clamp(44px, 8vw, 72px);
-      font-weight: 900;
-    }
-
-    h2 {
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 800;
-    }
-
-    h3 {
-      font-size: clamp(24px, 3vw, 32px);
-      font-weight: 700;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 var(--spacing-md);
-    }
-
-    @media (min-width: 768px) {
-      .container {
-        padding: 0 var(--spacing-lg);
-      }
-    }
-
-    /* Mejora de Botones - Estados más claros */
-    .btn {
-      display: inline-block;
-      padding: 16px 32px;
-      border: 2px solid var(--color-negro);
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 600;
-      font-size: 14px;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .btn-primary {
-      background-color: var(--color-negro);
-      color: var(--color-marfil);
-    }
-
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 400ms;
-    }
-
-    .btn-primary:hover::before {
-      left: 100%;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-    }
-
-    .btn-primary:focus-visible {
-      outline: 3px solid var(--color-turquesa);
-      outline-offset: 3px;
-    }
-
-    .btn-outline {
-      background-color: transparent;
-      color: var(--color-negro);
-    }
-
-    .btn-outline:hover {
-      background-color: var(--color-negro);
-      color: var(--color-marfil);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .btn-outline:active {
-      transform: translateY(0);
-    }
-
-    .btn-outline:focus-visible {
-      outline: 3px solid var(--color-turquesa);
-      outline-offset: 3px;
-    }
-
-    /* Ticket Cards - Mejora de jerarquía visual */
-    .ticket-card {
-      background-color: var(--color-blanco);
-      border: 3px solid var(--color-negro);
-      padding: var(--spacing-lg);
-      text-align: center;
-      position: relative;
-      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 4px 4px 0 var(--color-negro);
-    }
-
-    .ticket-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 8px 8px 0 var(--color-negro);
-    }
-
-    .ticket-card.featured {
-      border-width: 4px;
-      transform: scale(1.05);
-      z-index: 1;
-    }
-
-    .ticket-card.featured:hover {
-      transform: scale(1.05) translate(-2px, -2px);
-    }
-
-    .ticket-type {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      padding: var(--spacing-xs) var(--spacing-sm);
-      border: 2px solid var(--color-negro);
-      display: inline-block;
-      margin-bottom: var(--spacing-md);
-      background-color: var(--color-marfil);
-    }
-
-    .ticket-price {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 56px;
-      font-weight: 900;
-      margin-bottom: var(--spacing-xs);
-      line-height: 1;
-    }
-
-    .ticket-price span {
-      font-size: 28px;
-      font-weight: 700;
-      vertical-align: super;
-    }
-
-    .ticket-original-price {
-      font-size: 24px;
-      text-decoration: line-through;
-      color: var(--color-gris);
-      display: block;
-      margin-top: -8px;
-      margin-bottom: 8px;
-    }
-
-    .ticket-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: var(--spacing-sm);
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .ticket-features {
-      list-style: none;
-      padding: 0;
-      margin: var(--spacing-md) 0;
-      text-align: left;
-    }
-
-    .ticket-features li {
-      padding: 12px 0;
-      border-top: 1px solid var(--color-borde-suave);
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-    }
-
-    .ticket-features li:first-child {
-      border-top: 2px solid var(--color-negro);
-      margin-top: 16px;
-    }
-
-    .ticket-features li::before {
-      content: '✓';
-      color: var(--color-menta);
-      font-weight: bold;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    /* Header - Mejora de navegación móvil */
-    .header {
-      background-color: var(--color-turquesa);
-      height: 72px;
-      border-bottom: 3px solid var(--color-negro);
-      display: flex;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .nav-links {
-      display: none;
-      gap: var(--spacing-lg);
-    }
-
-    .nav-links a {
-      font-weight: 600;
-      color: var(--color-negro);
-      text-decoration: none;
-      position: relative;
-      padding: 4px 0;
-      transition: color 200ms;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 3px;
-      background-color: var(--color-negro);
-      transition: width 200ms;
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .nav-links a:focus-visible {
-      outline: 2px solid var(--color-negro);
-      outline-offset: 4px;
-      border-radius: 2px;
-    }
-
-    @media (min-width: 768px) {
-      .nav-links {
-        display: flex;
-      }
-      .menu-toggle {
-        display: none;
-      }
-    }
-
-    .menu-toggle {
-      background: none;
-      border: 2px solid var(--color-negro);
-      padding: 8px 12px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 14px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .menu-toggle:hover {
-      background-color: var(--color-negro);
-      color: var(--color-turquesa);
-    }
-
-    /* Chips mejorados */
-    .chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      background-color: var(--color-marfil);
-      border: 2px solid var(--color-negro);
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 200ms;
-      box-shadow: 2px 2px 0 var(--color-negro);
-    }
-
-    .chip:hover {
-      background-color: var(--color-amarillo);
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 var(--color-negro);
-    }
-
-    /* Badge de descuento mejorado */
-    .discount-badge {
-      position: absolute;
-      top: -12px;
-      right: -12px;
-      background-color: var(--color-coral);
-      color: var(--color-blanco);
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      border: 3px solid var(--color-negro);
-      box-shadow: 2px 2px 0 var(--color-negro);
-      z-index: 2;
-      letter-spacing: 1px;
-      transform: rotate(-5deg);
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: rotate(-5deg) scale(1); }
-      50% { transform: rotate(-5deg) scale(1.05); }
-    }
-
-    /* 🎯 MEJORA 1: Hero con imagen de fondo adaptable */
-    .hero {
-      min-height: 70vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, rgba(29, 54, 54, 0.9) 0%, rgba(50, 31, 53, 0.9) 100%);
-      color: var(--color-marfil);
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 140%;
-      background-image: url('/images/comic-texture.png'); /* 👈 Aquí pones tu imagen */
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      z-index: -1;
-      opacity: 0.8; /* Controla la visibilidad de la imagen */
-    }
-
-    /* Versión responsive de la imagen de fondo */
-    @media (max-width: 768px) {
-      .hero::before {
-        background-position: center;
-        background-size: cover;
-      }
-    }
-
-    /* 🎯 MEJORA 2: Sección tickets con fondo de cómic sutil */
-    .tickets-section {
-      padding: var(--spacing-3xl) 0;
-      background-color: var(--color-marfil);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .tickets-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-image: url('/images/hero-background.jpg'); /* 👈 Aquí pones tu textura de cómic */
-      background-size: 400px 400px; /* Ajusta según tu imagen */
-      background-repeat: repeat;
-      background-position: center;
-      opacity: 0.; /* Muy sutil, como páginas de cómic antiguas */
-      z-index: 0;
-      pointer-events: none;
-      mix-blend-mode: multiply; /* Se mezcla sutilmente con el fondo */
-    }
-
-    /* Efecto de papel envejecido adicional */
-    .tickets-section::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: 
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 2px,
-          rgba(0, 0, 0, 0.01) 2px,
-          rgba(0, 0, 0, 0.01) 4px
-        );
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .tickets-section > * {
-      position: relative;
-      z-index: 1;
-    }
-
-/* 🎯 MEJORA 3: Guest cards - TODO en el mismo cajón */
-.guest-card {
-  text-align: center;
-  position: relative;
-  height: auto;
-}
-
-.guest-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.guest-card-front {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: transparent;
-}
-
-/* El cajón que contiene TODO */
-.guest-image {
-  width: 220px;
-  height: 280px;
-  background-color: var(--color-borde-suave);
-  border: 3px solid var(--color-negro);
-  margin: 0 auto;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 4px 4px 0 var(--color-negro);
-  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-.guest-card:hover .guest-image {
-  box-shadow: 6px 6px 0 var(--color-negro);
-  transform: translate(-2px, -2px);
-}
-
-/* Contenido superior: foto + info */
-.guest-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--spacing-md);
-  background: linear-gradient(135deg, var(--color-borde-suave), var(--color-marfil));
-  flex: 1;
-  position: relative;
-  z-index: 1;
-}
-
-.guest-placeholder {
-  width: 120px;
-  height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 56px;
-  background-color: rgba(255, 255, 255, 0.5);
-  border: 2px solid var(--color-negro);
-  margin-bottom: var(--spacing-sm);
-}
-
-.guest-name {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 16px;
-  font-weight: 800;
-  margin-bottom: 4px;
-  color: var(--color-negro);
-}
-
-.guest-role {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-gris);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-/* La cortina que sube desde abajo DENTRO del mismo cajón */
-.guest-card-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 0;
-  background: linear-gradient(135deg, rgba(255, 122, 0, 0.96) 0%, rgba(255, 140, 50, 0.94) 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 var(--spacing-md);
-  overflow: hidden;
-  transition: height 500ms cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 10;
-  backdrop-filter: blur(4px);
-}
-
-.guest-card:hover .guest-card-overlay {
-  height: 100%; /* Cubre todo el cajón */
-}
-
-/* Contenido de la cortina */
-.overlay-content {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1) 100ms;
-  width: 100%;
-  text-align: center;
-}
-
-.guest-card:hover .overlay-content {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.guest-name-overlay {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  margin-bottom: 8px;
-  color: var(--color-blanco);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-  line-height: 1.2;
-}
-
-.guest-role-overlay {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--color-negro);
-  margin-bottom: var(--spacing-md);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* Redes sociales */
-.social-links {
-  display: flex;
-  gap: var(--spacing-sm);
-  justify-content: center;
-  width: 100%;
-}
-
-.social-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  background-color: var(--color-blanco);
-  border: 3px solid var(--color-negro);
-  color: var(--color-negro);
-  text-decoration: none;
-  font-size: 22px;
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 2px 2px 0 var(--color-negro);
-  position: relative;
-  overflow: hidden;
-}
-
-.social-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-negro);
-  transition: left 300ms;
-  z-index: -1;
-}
-
-.social-link:hover::before {
-  left: 0;
-}
-
-.social-link:hover {
-  color: var(--color-blanco);
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 var(--color-negro);
-}
-
-.social-icon {
-  position: relative;
-  z-index: 1;
-}
-
-
-
-
-    /* Legend mejorada */
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: var(--spacing-md);
-      margin-top: var(--spacing-xl);
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: var(--spacing-xs);
-      padding: 8px 16px;
-      background-color: var(--color-blanco);
-      border: 2px solid var(--color-negro);
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .legend-icon {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      border: 2px solid var(--color-negro);
-      flex-shrink: 0;
-    }
-
-    .hero-content {
-      text-align: center;
-      position: relative;
-      z-index: 1;
-      animation: fadeInUp 800ms ease-out;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .hero-subtitle {
-      font-size: clamp(18px, 3vw, 24px);
-      font-weight: 400;
-      margin-bottom: var(--spacing-sm);
-      color: var(--color-cian-claro);
-      opacity: 0;
-      animation: fadeInUp 800ms ease-out 200ms forwards;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-
-    .hero-cta {
-      margin-top: var(--spacing-xl);
-      opacity: 0;
-      animation: fadeInUp 800ms ease-out 400ms forwards;
-    }
-
-    /* Formas decorativas con animación */
-    .shape {
-      position: absolute;
-      pointer-events: none;
-      opacity: 0.7;
-    }
-
-    .shape-square {
-      border: 3px solid var(--color-negro);
-    }
-
-    .shape-1 {
-      width: 150px;
-      height: 150px;
-      background-color: var(--color-turquesa);
-      top: 10%;
-      right: 5%;
-      transform: rotate(45deg);
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .shape-2 {
-      width: 100px;
-      height: 100px;
-      background-color: var(--color-coral);
-      bottom: 10%;
-      left: 5%;
-      animation: float 5s ease-in-out infinite 1s;
-    }
-
-    .shape-3 {
-      width: 80px;
-      height: 80px;
-      background-color: var(--color-lima);
-      top: 50%;
-      left: 10%;
-      transform: rotate(30deg);
-      animation: float 7s ease-in-out infinite 2s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(45deg); }
-      50% { transform: translateY(-20px) rotate(45deg); }
-    }
-
-    /* Info banner mejorado */
-    .info-banner {
-      padding: 80px 0;
-      background: linear-gradient(135deg, var(--color-cian-claro) 0%, var(--color-turquesa) 100%);
-      border-bottom: 3px solid var(--color-negro);
-      text-align: center;
-    }
-
-    .info-detail {
-      font-size: 20px;
-      margin-bottom: var(--spacing-sm);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      font-weight: 500;
-    }
-
-    .cta-group {
-      display: flex;
-      gap: var(--spacing-sm);
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    /* Footer mejorado */
-    footer {
-      padding: var(--spacing-xl) 0;
-      background-color: var(--color-negro);
-      color: var(--color-marfil);
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: var(--spacing-xl);
-      margin-bottom: var(--spacing-lg);
-    }
-
-    .footer-section h4 {
-      color: var(--color-turquesa);
-      margin-bottom: var(--spacing-sm);
-      font-size: 18px;
-    }
-
-    .footer-section p,
-    .footer-section a {
-      color: var(--color-borde-suave);
-      font-size: 14px;
-      line-height: 1.8;
-      text-decoration: none;
-      transition: color 200ms;
-    }
-
-    .footer-section a:hover {
-      color: var(--color-turquesa);
-      text-decoration: underline;
-    }
-
-    .footer-bottom {
-      border-top: 1px solid var(--color-gris);
-      padding-top: var(--spacing-md);
-      text-align: center;
-      color: var(--color-borde-suave);
-      font-size: 14px;
-    }
-
-    /* Accesibilidad */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    }
-
-    /* Scroll suave */
-    html {
-      scroll-behavior: smooth;
-    }
-
- /* Responsive */
-@media (max-width: 767px) {
-  .guest-image {
-    width: 200px;
-    height: 260px;
+  :root {
+    --color-marfil: #F7F4EA;
+    --color-negro: #111111;
+    --color-gris: #5A5A5A;
+    --color-borde-suave: #E7E2D7;
+    --color-blanco: #FFFFFF;
+
+    --color-turquesa: #2EE7D3;
+    --color-menta: #23D9B3;
+    --color-lima: #C9F86A;
+    --color-amarillo: #FFD64D;
+    --color-naranja: #FF7A00;
+    --color-coral: #FF4F6D;
+    --color-rojo: #f40404;
+    --color-lavanda: #B79BF5;
+    --color-cian-claro: #7CF3E9;
+    --color-azul: #0051b3;
+
+    --color-night: #101320;
+    --color-night-deep: #0b0e17;
+
+    --spacing-xs: 8px;
+    --spacing-sm: 16px;
+    --spacing-md: 24px;
+    --spacing-lg: 32px;
+    --spacing-xl: 48px;
+    --spacing-2xl: 64px;
+    --spacing-3xl: 96px;
   }
 
-  .guest-placeholder {
-    width: 100px;
-    height: 100px;
-    font-size: 48px;
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--color-marfil);
+    color: var(--color-negro);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  h1 {
+    font-size: clamp(48px, 9vw, 82px);
+    font-weight: 900;
+  }
+
+  h2 {
+    font-size: clamp(34px, 6vw, 56px);
+  }
+
+  h3 {
+    font-size: clamp(22px, 3.5vw, 30px);
+    font-weight: 700;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      padding: 0 var(--spacing-lg);
+    }
+  }
+
+  /* Accesibilidad */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-negro);
+    color: var(--color-marfil);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+    z-index: 1000;
+    text-decoration: none;
+    transition: top 200ms ease;
+  }
+
+  .skip-link:focus {
+    top: 16px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  section {
+    scroll-margin-top: 90px;
+  }
+
+  /* Botones */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 36px;
+    border: 2px solid var(--color-negro);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    transition: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    background: none;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+
+  .btn:focus-visible {
+    outline: 3px solid var(--color-turquesa);
+    outline-offset: 3px;
+  }
+
+  .btn-primary {
+    background: var(--color-negro);
+    color: var(--color-marfil);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+  }
+
+  .btn-primary::after {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    mix-blend-mode: screen;
+  }
+
+  .btn-primary:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.45);
+  }
+
+  .btn-primary:hover::after {
+    opacity: 1;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: rgba(201, 237, 233, 0.25);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-outline:hover {
+    background: var(--color-negro);
+    color: var(--color-marfil);
+    transform: translate(-3px, -3px);
+  }
+
+  .btn-outline:hover::after {
+    opacity: 1;
+    background: rgba(46, 15, 15, 0.14);
+  }
+
+  .btn-outline-light {
+    background: transparent;
+    color: var(--color-marfil);
+    border-color: var(--color-marfil);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.45);
+  }
+
+  .btn-outline-light:hover {
+    background: var(--color-marfil);
+    color: var(--color-negro);
+  }
+
+  .btn-sm {
+    padding: 12px 20px;
+    font-size: 11px;
+    letter-spacing: 1.4px;
+  }
+
+  .btn .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    transition: transform 180ms ease;
+  }
+
+  .btn:hover .btn-icon,
+  .btn:focus-visible .btn-icon {
+    transform: translateX(4px) scale(1.5);
+    color: #3fd416;
+  }
+
+  /* Header */
+  .header {
+    background: rgba(17, 18, 30, 0.85);
+    backdrop-filter: blur(12px);
+    height: 72px;
+    border-bottom: 3px solid var(--color-turquesa);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 120;
+  }
+
+  .header .container {
+    width: 100%;
+  }
+
+  .main-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-md);
+  }
+
+  .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-marfil);
+    text-decoration: none;
+  }
+
+  .brand-mark span {
+    display: inline-flex;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0));
+    border: 2px solid var(--color-marfil);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .brand-slogan {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .nav-links {
+    display: none;
+    gap: var(--spacing-lg);
+    align-items: center;
+  }
+
+  .nav-links a {
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    position: relative;
+    padding: 6px 0;
+    transition: color 220ms ease;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background-color: var(--color-turquesa);
+    transition: width 220ms ease;
+  }
+
+  .nav-links a:hover,
+  .nav-links a:focus-visible {
+    color: var(--color-turquesa);
+  }
+
+  .nav-links a:hover::after,
+  .nav-links a:focus-visible::after {
+    width: 100%;
+  }
+
+  #nav-cta {
+    display: none;
+  }
+
+  .menu-toggle {
+    background: none;
+    border: 2px solid var(--color-marfil);
+    color: var(--color-marfil);
+    padding: 8px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .menu-toggle:hover {
+    background-color: var(--color-marfil);
+    color: var(--color-night);
+  }
+
+  @media (min-width: 992px) {
+    .nav-links {
+      display: flex;
+    }
+    .menu-toggle {
+      display: none;
+    }
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 78vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(16, 19, 32, 0.95), rgba(20, 12, 30, 0.96));
+    color: var(--color-marfil);
+    text-shadow: 3px 3px 12px rgba(0,0,0,0.65);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(140deg, rgba(44, 211, 233, 0.45), rgba(183, 155, 245, 0.3), rgba(255, 122, 0, 0.3)),
+      url('/public/images/bg-hero.webp') center/cover no-repeat;
+    opacity: 0.65;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(80% 80% at 50% 50%, rgba(0,0,0,0), rgba(0,0,0,0.65));
+  }
+
+  .hero-content {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--spacing-md);
+    justify-items: center;
+    animation: fadeInUp 800ms ease-out;
+  }
+
+  .hero-pretitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(0,0,0,0.35);
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 999px;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(18px, 3.5vw, 26px);
+    font-weight: 500;
+    color: rgba(255,255,255,0.82);
+    text-transform: none;
+    letter-spacing: 0.5px;
+    max-width: 560px;
+    opacity: 0;
+    animation: fadeInUp 800ms ease-out 160ms forwards;
+  }
+
+  .hero-tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .hero-cta {
+    margin-top: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeInUp 800ms ease-out 320ms forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Shapes */
+  .shape {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.65;
+    filter: drop-shadow(8px 8px 0 rgba(0,0,0,0.45));
+  }
+
+  .shape-square {
+    border: 3px solid rgba(255,255,255,0.4);
+  }
+
+  .shape-1 {
+    width: 160px;
+    height: 160px;
+    background: var(--color-turquesa);
+    top: 12%;
+    right: 7%;
+    transform: rotate(45deg);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .shape-2 {
+    width: 110px;
+    height: 110px;
+    background: var(--color-coral);
+    bottom: 12%;
+    left: 6%;
+    animation: float 5.5s ease-in-out infinite 1s;
+  }
+
+  .shape-3 {
+    width: 90px;
+    height: 90px;
+    background: var(--color-lima);
+    top: 48%;
+    left: 12%;
+    transform: rotate(30deg);
+    animation: float 7s ease-in-out infinite 2s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(45deg); }
+    50% { transform: translateY(-18px) rotate(45deg); }
+  }
+
+  /* Tickets */
+  .tickets-section {
+    padding: var(--spacing-3xl) 0;
+    background: var(--color-marfil);
+    position: relative;
+    overflow: hidden;
+    border-top: 4px solid var(--color-negro);
+  }
+
+  .tickets-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('/public/images/comic-halftone.webp');
+    /*background-size: 420px 420px;*/
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    opacity: 0.1;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    
+  }
+
+  .tickets-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,122,0,0.09), transparent 40%, transparent 60%, rgba(46,231,211,0.08));
+    pointer-events: none;
+  }
+
+  .tickets-heading {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    display: grid;
+    gap: var(--spacing-xs);
+  }
+
+  .tickets-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border: 2px solid var(--color-negro);
+    background-color: var(--color-lima);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    justify-self: center;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+  }
+
+  .tickets-subtitle {
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: none;
+    color: var(--color-gris);
+  }
+
+  .tickets-summary {
+    max-width: 760px;
+    margin: 0 auto var(--spacing-2xl);
+    text-align: center;
+    display: grid;
+    gap: var(--spacing-sm);
+    color: rgba(17,17,17,0.85);
+  }
+
+  .tickets-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .tickets-meta li {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    border: 2px dashed var(--color-negro);
+    background: rgba(255,255,255,0.7);
+    font-weight: 600;
+    letter-spacing: 0.4px;
+  }
+
+  .tickets-meta i {
+    color: var(--color-coral);
+  }
+
+  .tickets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .ticket-card {
+    background-color: var(--color-menta);
+    border: 3px solid var(--color-negro);
+    padding: var(--spacing-lg);
+    text-align: center;
+    position: relative;
+    display: grid;
+    gap: var(--spacing-md);
+    transition: all 260ms cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 6px 6px 0 rgba(0,0,0,0.4);
+  }
+
+  .ticket-card:hover {
+    transform: translate(-4px, -4px) rotate(-0.5deg);
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.5);
+  }
+
+  .ticket-card::after {
+    content: '';
+    position: absolute;
+    inset: 12px;
+    border: 2px dashed rgba(0,0,0,0.2);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+
+  .ticket-card:hover::after {
+    opacity: 1;
+  }
+
+  .ticket-card.featured {
+    border-width: 4px;
+    transform: translateY(-8px);
+    background: linear-gradient(145deg, rgba(114, 66, 21, 0.41), rgba(255,122,0,0.05));
+  }
+
+  .ticket-card.featured:hover {
+    transform: translate(-4px, -12px);
+  }
+
+  .ticket-card--highlight {
+    border-width: 4px;
+    transform: translateY(-8px);
+    background: linear-gradient(145deg, rgba(204, 1, 1, 0.761), rgba(213, 101, 4, 0.75));
+  }
+
+  .ticket-card--highlight:hover {
+    transform: translate(-4px, -12px);
+  }
+
+  .ticket-card-header {
+    display: grid;
+    gap: var(--spacing-xs);
+    justify-items: center;
+  }
+
+  .discount-badge {
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: var(--color-coral);
+    color: var(--color-blanco);
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 800;
+    border: 2px solid var(--color-negro);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+    z-index: 10;
+  }
+
+  .ticket-type {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.2px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 2px solid var(--color-negro);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background-color: var(--color-marfil);
+    margin: 0 auto;
+  }
+
+  .ticket-type--day {
+    /*background: linear-gradient(135deg, #fff0c2, #ffe9a6);*/
+    background: linear-gradient(135deg, #f5f7d1cf, #fffcf1cf);
+  }
+
+  .ticket-type--weekend {
+    background: linear-gradient(135deg, #390303c8, #121228c8);
+    color: var(--color-amarillo);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.45);
+    border-color: #111111;
+  }
+
+  .ticket-type--vip {
+    background: linear-gradient(135deg, #f5f7d1cf, #fffcf1cf);
+  }
+
+  .ticket-price {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 58px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .ticket-price span {
+    font-size: 28px;
+    font-weight: 700;
+    vertical-align: super;
+  }
+
+  .ticket-price-group {
+    display: grid;
+    gap: 6px;
+  }
+
+  .ticket-original-price {
+    font-size: 22px;
+    text-decoration: line-through;
+    color: rgba(0,0,0,0.45);
+  }
+
+  .ticket-price-note {
+    font-size: 14px;
+    color: rgba(17,17,17,0.7);
+    line-height: 1.6;
+  }
+
+  .ticket-title {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .ticket-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 2px dashed rgba(0,0,0,0.3);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    background-color: rgba(0,0,0,0.05);
+  }
+
+  .ticket-label--best {
+    border-style: solid;
+    border-color: var(--color-negro);
+    background: rgba(142, 55, 70, 0.12);
+    color: var(--color-negro);
+  }
+
+  .ticket-features {
+    list-style: none;
+    padding: 0;
+    margin: var(--spacing-md) 0;
+    text-align: left;
+    display: grid;
+    gap: 12px;
+  }
+
+  .ticket-features li {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 12px;
+    align-items: start;
+    font-weight: 600;
+    color: #2f2f2f;
+  }
+
+  .ticket-features li::before {
+    content: '★';
+    color: var(--color-menta);
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .ticket-card-footer {
+    display: grid;
+    gap: var(--spacing-xs);
+    justify-items: center;
+  }
+
+  .ticket-guarantee {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(0,0,0,0.6);
+  }
+
+  .ticket-footer-note {
+    text-align: center;
+    margin-top: var(--spacing-xl);
+  }
+
+  .tickets-cta {
+    margin-top: var(--spacing-2xl);
+    text-align: center;
+    display: grid;
+    gap: var(--spacing-sm);
+    justify-items: center;
+  }
+
+  .tickets-cta-note {
+    font-size: 14px;
+    color: rgba(17,17,17,0.7);
+  }
+
+  .tickets-cta-note a {
+    color: var(--color-negro);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 24px;
+    background-color: var(--color-amarillo);
+    border: 2px solid var(--color-negro);
+    font-size: 16px;
+    font-weight: 700;
+    transition: all 220ms ease;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.35);
+    letter-spacing: 0.8px;
+  }
+
+  .chip:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.4);
+  }
+
+  .chip-icon {
+    font-size: 20px;
+  }
+
+  /* Invitados */
+  #invitados {
+    position: relative;
+    overflow: hidden;
+    padding: var(--spacing-3xl) 0;
+    border-top: 4px solid var(--color-negro);
+    border-bottom: 4px solid var(--color-negro);
+    background:
+      linear-gradient(145deg, rgba(10, 10, 10, 0.55), rgba(16, 3, 30, 0.55)),
+      url('/public/images/bg-invitados.webp') center/cover no-repeat;
+    color: var(--color-marfil); 
+    text-shadow: 0 2px 4px rgba(20, 24, 23, 0.9);
+  }
+
+  #invitados::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(6, 10, 20, 0.65);
+    backdrop-filter: blur(1px);
+    pointer-events: none;
+  }
+
+  #invitados > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .guests-heading {
+    text-align: center;
+    margin-bottom: var(--spacing-2xl);
+    display: grid;
+    gap: var(--spacing-xs);
+  }
+
+  .guests-subtitle {
+    color: rgba(255, 255, 255, 0.65);
+    letter-spacing: 1px;
+    font-size: 15px;
+    text-transform: uppercase;
+  }
+
+  .guests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--spacing-lg);
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  .guest-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 240ms ease;
+    isolation: isolate;
+  }
+
+  .guest-card:hover,
+  .guest-card:focus-within {
+    transform: translateY(-6px);
+  }
+
+  .guest-card:focus-within {
+    outline: 3px solid var(--color-turquesa);
+    outline-offset: 6px;
+  }
+
+  .guest-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.55);
+    background-size: cover;
+    background-position: center;
+  }
+
+  .guest-content {
+    width: 100%;
+    padding: var(--spacing-md);
+    text-align: center;
+    display: grid;
+    gap: 8px;
+    background: linear-gradient(180deg, rgba(6, 10, 20, 0.1) 0%, rgba(6, 10, 20, 0.85) 90%);
   }
 
   .guest-name {
-    font-size: 15px;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-blanco);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.75);
   }
 
   .guest-role {
-    font-size: 11px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.78);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .guest-card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: var(--spacing-md);
+    background: linear-gradient(180deg, rgba(14, 16, 27, 0.2) 0%, rgba(14, 16, 27, 0.88) 85%);
+    transform: translateY(100%);
+    transition: transform 360ms cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+  }
+
+  .guest-card:hover .guest-card-overlay,
+  .guest-card:focus-within .guest-card-overlay {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .overlay-content {
+    width: 100%;
+    display: grid;
+    gap: var(--spacing-sm);
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 360ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .guest-card:hover .overlay-content,
+  .guest-card:focus-within .overlay-content {
+    transform: translateY(0);
   }
 
   .guest-name-overlay {
     font-size: 18px;
+    font-weight: 800;
+    color: var(--color-blanco);
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  .guest-role-overlay {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--color-turquesa);
+    text-transform: uppercase;
+  }
+
+  .social-links {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
   }
 
   .social-link {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    display: grid;
+    place-items: center;
+    color: var(--color-marfil);
+    background: rgba(255, 255, 255, 0.12);
+    transition: transform 220ms ease, background-color 220ms ease, color 220ms ease;
   }
-}
-  </style>
+
+  .social-link:hover,
+  .social-link:focus-visible {
+    transform: translateY(-4px);
+    background-color: var(--color-turquesa);
+    color: var(--color-negro);
+  }
+
+  .guest-photo-joel {
+    background-image: url('/public/images/img_2.webp');
+  }
+
+  .guest-photo-marina {
+    background-image: url('/public/images/img_1.webp');
+  }
+
+  .guest-photo-carlos {
+    background-image: url('/public/images/img_4.webp');
+  }
+
+  .guest-photo-claudia {
+    background-image: url('/public/images/img_3.webp');
+  }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-2xl);
+    max-width: 1040px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .legend-item {
+    flex: 1 1 220px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 3px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
+    transition: transform 220ms ease;
+    color: rgba(255, 255, 255, 0.85);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .legend-item:hover {
+    transform: translateY(-4px);
+  }
+
+  .legend-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    border: 3px solid rgba(255, 255, 255, 0.65);
+    flex-shrink: 0;
+  }
+
+  .legend-gaming {
+    background: linear-gradient(135deg, #ff4747, #ff7a00);
+  }
+
+  .legend-panels {
+    background: linear-gradient(135deg, #ffd64d, #ffb347);
+  }
+
+  .legend-cosplay {
+    background: linear-gradient(135deg, #b79bf5, #7cf3e9);
+  }
+
+  /* Info banner */
+  .info-banner {
+    position: relative;
+    overflow: hidden;
+    padding: var(--spacing-3xl) 0;
+    background: radial-gradient(120% 120% at 20% 20%, rgba(46, 231, 211, 0.18), transparent 60%),
+                linear-gradient(145deg, #18243c 0%, #101320 55%, #0c0e18 100%);
+    color: var(--color-marfil);
+    border-bottom: 4px solid var(--color-turquesa);
+  }
+
+  .info-banner::before {
+    content: '';
+    position: absolute;
+    inset: -30%;
+    background: conic-gradient(from 45deg, rgba(255, 122, 0, 0.12), rgba(183, 155, 245, 0.2), transparent 70%);
+    mix-blend-mode: screen;
+    opacity: 0.55;
+    pointer-events: none;
+    transform: rotate(8deg);
+  }
+
+  .info-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.04) 0,
+        rgba(255, 255, 255, 0.04) 1px,
+        transparent 1px,
+        transparent 18px
+      );
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .info-wrapper {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--spacing-2xl);
+  }
+
+  .info-heading {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+    display: grid;
+    gap: var(--spacing-sm);
+  }
+
+  .info-pretitle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    justify-self: center;
+  }
+
+  .info-description {
+    color: rgba(255,255,255,0.75);
+    font-size: 16px;
+    line-height: 1.8;
+  }
+
+  .info-cards {
+    display: grid;
+    gap: var(--spacing-lg);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .info-card {
+    position: relative;
+    padding: var(--spacing-lg);
+    border: 3px solid rgba(255,255,255,0.18);
+    background: linear-gradient(145deg, rgba(12, 14, 24, 0.8), rgba(12, 14, 24, 0.55));
+    box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.6);
+    display: grid;
+    gap: var(--spacing-sm);
+    transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    overflow: hidden;
+  }
+
+  .info-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at top right, rgba(183, 155, 245, 0.25), transparent 55%);
+    opacity: 0;
+    transition: opacity 220ms ease;
+  }
+
+  .info-card:hover,
+  .info-card:focus-within {
+    transform: translate(-4px, -4px);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.65);
+    border-color: var(--color-turquesa);
+  }
+
+  .info-card:hover::before,
+  .info-card:focus-within::before {
+    opacity: 1;
+  }
+
+  .info-card-icon {
+    width: 54px;
+    height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .info-card-icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(46, 231, 211, 0.3), rgba(183, 155, 245, 0.25));
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+    transition: transform 200ms ease, opacity 200ms ease;
+  }
+
+  .info-card-icon svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--color-marfil);
+    position: relative;
+    z-index: 1;
+  }
+
+  .info-card:hover .info-card-icon::before,
+  .info-card:focus-within .info-card-icon::before {
+    transform: translateY(-2px) scale(1.04);
+  }
+
+  .info-card h3 {
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  .info-card p {
+    color: rgba(255,255,255,0.72);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .info-card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--color-turquesa);
+    font-weight: 700;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    transition: gap 180ms ease, color 180ms ease;
+    margin-top: 4px;
+  }
+
+  .info-card-link span {
+    transition: transform 180ms ease;
+  }
+
+  .info-card-link:hover,
+  .info-card-link:focus-visible {
+    color: var(--color-lima);
+  }
+
+  .info-card-link:hover span,
+  .info-card-link:focus-visible span {
+    transform: translateX(4px);
+  }
+
+  .info-card-badge,
+  .info-card-cta {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 6px 14px;
+    border: 2px solid rgba(255,255,255,0.18);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    background: linear-gradient(135deg, rgba(46, 231, 211, 0.2), rgba(46, 231, 211, 0.05));
+  }
+
+  .info-card-cta {
+    background: linear-gradient(135deg, rgba(255, 122, 0, 0.25), rgba(255, 122, 0, 0.08));
+    border-color: rgba(255, 122, 0, 0.4);
+  }
+
+  .cta-group {
+    text-align: center;
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .info-note {
+    margin-top: var(--spacing-sm);
+    padding: 14px 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(135deg, rgba(201, 248, 106, 0.25), rgba(46, 231, 211, 0.15));
+    border: 2px solid rgba(201, 248, 106, 0.45);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    justify-content: center;
+  }
+
+  .info-note::before {
+    content: '🎟️';
+    font-size: 20px;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.25));
+  }
+
+  .info-note strong {
+    color: var(--color-lima);
+    letter-spacing: 1px;
+  }
+
+  /* Footer */
+  .site-footer {
+    position: relative;
+    color: var(--color-marfil);
+    background: linear-gradient(160deg, #111111 0%, #181b27 45%, #111111 100%);
+    border-top: 4px solid var(--color-turquesa);
+    overflow: hidden;
+  }
+
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(135deg, rgba(46, 231, 211, 0.08) 0%, rgba(183, 155, 245, 0.08) 100%);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .site-footer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.05) 0,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 14px
+      );
+    mix-blend-mode: overlay;
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  .footer-ribbon {
+    background: linear-gradient(90deg, var(--color-turquesa) 0%, var(--color-coral) 100%);
+    color: var(--color-negro);
+    border-bottom: 3px solid var(--color-negro);
+    padding: var(--spacing-sm) 0;
+  }
+
+  .ribbon-inner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    justify-content: center;
+    text-align: center;
+    font-weight: 700;
+    flex-wrap: wrap;
+  }
+
+  .ribbon-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background-color: var(--color-negro);
+    color: var(--color-marfil);
+    border: 2px solid var(--color-marfil);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .footer-core {
+    position: relative;
+    z-index: 1;
+    padding: var(--spacing-2xl) 0;
+    display: grid;
+    gap: var(--spacing-xl);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+
+  .footer-brand {
+    display: grid;
+    gap: var(--spacing-sm);
+  }
+
+  .footer-logo {
+    display: inline-block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    border: 3px solid var(--color-marfil);
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.4);
+  }
+
+  .footer-tagline {
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .footer-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+  }
+
+  .footer-social-link {
+    width: 46px;
+    height: 46px;
+    border: 2px solid var(--color-marfil);
+    color: var(--color-marfil);
+    display: grid;
+    place-items: center;
+    font-size: 20px;
+    border-radius: 50%;
+    transition: all 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .footer-social-link::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--color-turquesa), var(--color-lavanda));
+    opacity: 0;
+    transition: opacity 220ms;
+  }
+
+  .footer-social-link:hover,
+  .footer-social-link:focus-visible {
+    transform: translate(-2px, -2px);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+  }
+
+  .footer-social-link:hover::before,
+  .footer-social-link:focus-visible::before {
+    opacity: 1;
+  }
+
+  .footer-social-link i {
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-section h4 {
+    color: var(--color-turquesa);
+    margin-bottom: var(--spacing-sm);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 200ms, transform 200ms;
+    position: relative;
+  }
+
+  .footer-links a::before {
+    content: '⟶';
+    margin-right: 8px;
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: transform 200ms, opacity 200ms;
+    color: var(--color-lima);
+  }
+
+  .footer-links a:hover,
+  .footer-links a:focus-visible {
+    color: var(--color-blanco);
+    transform: translateX(4px);
+  }
+
+  .footer-links a:hover::before,
+  .footer-links a:focus-visible::before {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .footer-newsletter p {
+    color: rgba(255,255,255,0.75);
+    font-size: 14px;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .newsletter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+  }
+
+  .newsletter-form input {
+    flex: 1 1 220px;
+    padding: 14px 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    background-color: rgba(255,255,255,0.07);
+    color: var(--color-marfil);
+    font-size: 14px;
+    transition: border-color 200ms, background-color 200ms;
+  }
+
+  .newsletter-form input::placeholder {
+    color: rgba(255,255,255,0.6);
+  }
+
+  .newsletter-form input:focus {
+    border-color: var(--color-turquesa);
+    background-color: rgba(255,255,255,0.12);
+    outline: none;
+  }
+
+  .newsletter-note {
+    display: block;
+    margin-top: 10px;
+    color: rgba(255,255,255,0.5);
+    font-size: 12px;
+  }
+
+  .footer-bottom {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding: var(--spacing-md) 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-sm);
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .footer-bottom a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 200ms;
+  }
+
+  .footer-bottom a:hover,
+  .footer-bottom a:focus-visible {
+    color: var(--color-turquesa);
+  }
+
+  .footer-bottom-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .hero {
+      min-height: 78vh;
+    }
+
+    .hero-cta {
+      width: 100%;
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    .tickets-section {
+      padding: var(--spacing-2xl) 0;
+    }
+
+    .ticket-card {
+      padding: var(--spacing-md);
+    }
+
+    .tickets-meta li {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .chip {
+      font-size: 14px;
+    }
+
+    .legend {
+      gap: var(--spacing-md);
+    }
+
+    .legend-item {
+      flex: 1 1 100%;
+    }
+
+    .info-banner {
+      padding: var(--spacing-2xl) 0;
+    }
+
+    .info-card {
+      padding: var(--spacing-md);
+    }
+
+    .guest-card {
+      border-radius: 10px;
+    }
+
+    .guest-card-overlay {
+      padding: var(--spacing-sm);
+    }
+
+    .social-link {
+      width: 44px;
+      height: 44px;
+    }
+
+    .footer-core {
+      grid-template-columns: 1fr;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .footer-bottom-right {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .ribbon-inner {
+      gap: var(--spacing-sm);
+    }
+
+    .ribbon-inner p {
+      font-size: 14px;
+    }
+  }
+
+  /* Utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn,
+    .info-card,
+    .info-card-icon::before {
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+    }
+  }
+
+  /* Scrollbar styling for WebKit browsers */
+  .ticket-card-day{
+    background: linear-gradient(145deg, rgba(209, 198, 4, 0.881), rgba(192, 255, 32, 0.55));
+  }
+</style>
 </head>
 <body>
-  
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
   <!-- HEADER -->
   <header class="header">
     <div class="container">
-      <nav style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <a href="/" style="font-family: 'Space Grotesk', sans-serif; font-weight: 900; font-size: 24px; color: var(--color-negro); text-decoration: none;">
-          COMIC CON FESTIVAL
+      <nav class="main-nav" aria-label="Navegación principal">
+        <a href="/eventoevolve/" class="brand-mark">
+          <span>FestiGeek</span>
+          <small class="brand-slogan">Las Palmas · 2025</small>
         </a>
+
         <div class="nav-links">
-          <a href="#tickets">TICKETS</a>
-          <a href="#invitados">INVITADOS</a>
-          <a href="#programa">PROGRAMA</a>
-          <a href="#ubicacion">UBICACIÓN</a>
+          <a href="/eventoevolve/#tickets">Tickets</a>
+          <a href="/eventoevolve/#invitados">Invitados</a>
+          <a href="/eventoevolve/#programa">Programa</a>
+          <a href="/eventoevolve/#ubicacion">Ubicación</a>
         </div>
+
+        <a href="/eventoevolve/#tickets" class="btn btn-outline-light btn-sm" id="nav-cta">Comprar</a>
         <button class="menu-toggle" aria-label="Abrir menú de navegación">
-          MENÚ
+          Menú
         </button>
       </nav>
     </div>
   </header>
 
-  <!-- HERO SECTION CON IMAGEN DE FONDO -->
-  <section class="hero">
-    <!-- Formas decorativas -->
+  <!-- HERO -->
+  <section class="hero" id="main-content">
     <div class="shape shape-square shape-1"></div>
     <div class="shape shape-square shape-2"></div>
     <div class="shape shape-square shape-3"></div>
-    
+
     <div class="container hero-content">
-      <h1 style="margin-bottom: var(--spacing-md); text-shadow: 3px 3px 6px rgba(0,0,0,0.7);">
-        COMIC CON FESTIVAL
-      </h1>
-      
+      <span class="hero-pretitle">Comic · Anime · Gaming</span>
+      <h1>Comic Con Festival</h1>
       <p class="hero-subtitle">
-        Unleash Your Inner Hero. Game. Cosplay. Create.
+        Desata tu lado épico con torneos, cosplay, artistas internacionales y experiencias inmersivas.
       </p>
-      
+      <span class="hero-tagline">15 · 16 de marzo · Recinto Ferial de Canarias</span>
+
       <div class="hero-cta">
-        <a href="#tickets" class="btn btn-outline" style="font-size: 16px; padding: 20px 48px; color: var(--color-marfil); border-color: var(--color-marfil);">
-          GET TICKETS
-        </a>
+        <a href="/eventoevolve/#tickets" class="btn btn-primary">Comprar tickets</a>
+        <a href="/eventoevolve/info" class="btn btn-outline-light">Descubre el line-up</a>
       </div>
     </div>
   </section>
 
-  <!-- TICKETS SECTION CON TEXTURA DE CÓMIC -->
-  <section id="tickets" class="tickets-section">
-    <div class="container">
-      <h2 style="text-align: center; margin-bottom: var(--spacing-2xl);">
-        CHOOSE YOUR ADVENTURE
-      </h2>
-      
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--spacing-lg); max-width: 1100px; margin: 0 auto;">
-        
-        <!-- Day Pass -->
-        <div class="ticket-card" style="background-color: var(--color-menta);">
-          <div class="ticket-type">
-            DAY PASS
-          </div>
-          <div class="ticket-price">
-            <span>€</span>99
-          </div>
-          <div class="ticket-title">
-            Un Día
-          </div>
-          <ul class="ticket-features">
-            <li>Acceso general 1 día</li>
-            <li>Zona de exposición</li>
-            <li>Meet & Greet básico</li>
-            <li>Zona gaming</li>
-          </ul>
-          <a href="/comprar/day-pass" class="btn btn-primary" style="width: 100%;">
-            BUY NOW
-          </a>
-        </div>
-
-        <!-- Weekend Pass - DESTACADO -->
-        <div class="ticket-card featured" style="background-color: var(--color-naranja); position: relative;">
-          <div class="discount-badge">
-            -20%
-          </div>
-          <div class="ticket-type" style="background-color: var(--color-negro); color: var(--color-amarillo); border-color: var(--color-negro);">
-            ⭐ WEEKEND PASS
-          </div>
-          <div class="ticket-original-price">
-            <span>€</span>198
-          </div>
-          <div class="ticket-price">
-            <span>€</span>159
-          </div>
-          <div class="ticket-title">
-            Fin de Semana
-          </div>
-          <ul class="ticket-features">
-            <li>Acceso 2 días completo</li>
-            <li>Entrada prioritaria</li>
-            <li>Descuento 10% merchandising</li>
-            <li>Acceso a talleres</li>
-            <li>Meet & Greet premium</li>
-          </ul>
-          <a href="/comprar/weekend-pass" class="btn btn-primary" style="width: 100%;">
-            BUY NOW
-          </a>
-        </div>
-
-        <!-- VIP Experience -->
-        <div class="ticket-card" style="background-color: var(--color-lavanda);">
-          <div class="ticket-type">
-            VIP EXPERIENCE
-          </div>
-          <div class="ticket-price">
-            <span>€</span>295
-          </div>
-          <div class="ticket-title">
-            Experiencia VIP
-          </div>
-          <ul class="ticket-features">
-            <li>Todo lo del Weekend Pass</li>
-            <li>Backstage tour exclusivo</li>
-            <li>Cena con invitados</li>
-            <li>Asiento preferente</li>
-            <li>Pack exclusivo de regalos</li>
-            <li>Foto profesional</li>
-          </ul>
-          <a href="/comprar/vip" class="btn btn-primary" style="width: 100%;">
-            BUY NOW
-          </a>
-        </div>
-
-      </div>
-
-      <!-- Early Bird Notice -->
-      <div style="text-align: center; margin-top: var(--spacing-xl);">
-        <div class="chip" style="background-color: var(--color-amarillo); font-size: 16px;">
-          <span style="font-size: 20px;">⚡</span>
-          <span>EARLY BIRD: Ahorra 20% hasta el 15 de enero</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<!-- FEATURED GUESTS - TODO EN EL MISMO CAJÓN -->
-<section id="invitados" style="padding: var(--spacing-3xl) 0; background-color: var(--color-blanco); border-top: 3px solid var(--color-negro); border-bottom: 3px solid var(--color-negro);">
+  <!-- TICKETS -->
+<section id="tickets" class="tickets-section">
   <div class="container">
-    <h2 style="text-align: center; margin-bottom: var(--spacing-2xl);">
-      FEATURED GUESTS & ARTISTS
-    </h2>
-    
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--spacing-lg); max-width: 1000px; margin: 0 auto;">
-      
-      <!-- Guest 1 -->
-      <div class="guest-card">
-        <div class="guest-card-inner">
-          <div class="guest-card-front">
-            <!-- TODO DENTRO DEL MISMO CAJÓN -->
-            <div class="guest-image">
-              <!-- Contenido visible por defecto -->
-              <div class="guest-content">
-                <div class="guest-placeholder">👤</div>
-                <h3 class="guest-name">Joel Gutiérrez</h3>
-                <p class="guest-role">Doblador de Anime</p>
-              </div>
-              
-              <!-- CORTINA QUE SUBE -->
-              <div class="guest-card-overlay">
-                <div class="overlay-content">
-                  <h3 class="guest-name-overlay">Joel Gutiérrez</h3>
-                  <p class="guest-role-overlay">Doblador de Anime</p>
-                  
-                  <div class="social-links">
-                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
-                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
-                    </a>
-                    <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
-                      <span class="social-icon"><i class="fa-brands fa-x-twitter"></i></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Guest 2 -->
-      <div class="guest-card">
-        <div class="guest-card-inner">
-          <div class="guest-card-front">
-            <div class="guest-image">
-              <div class="guest-content">
-                <div class="guest-placeholder">👤</div>
-                <h3 class="guest-name">Marina López</h3>
-                <p class="guest-role">Artista de Cómic</p>
-              </div>
-              
-              <div class="guest-card-overlay">
-                <div class="overlay-content">
-                  <h3 class="guest-name-overlay">Marina López</h3>
-                  <p class="guest-role-overlay">Artista de Cómic</p>
-                  
-                  <div class="social-links">
-                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
-                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
-                    </a>
-                    <a href="https://facebook.com" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
-                      <span class="social-icon"><i class="fa-brands fa-facebook"></i></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Guest 3 -->
-      <div class="guest-card">
-        <div class="guest-card-inner">
-          <div class="guest-card-front">
-            <div class="guest-image">
-              <div class="guest-content">
-                <div class="guest-placeholder">👤</div>
-                <h3 class="guest-name">Carlos Ruiz</h3>
-                <p class="guest-role">Streamer Gaming</p>
-              </div>
-              
-              <div class="guest-card-overlay">
-                <div class="overlay-content">
-                  <h3 class="guest-name-overlay">Carlos Ruiz</h3>
-                  <p class="guest-role-overlay">Streamer Gaming</p>
-                  
-                  <div class="social-links">
-                    <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
-                      <span class="social-icon"><i class="fa-brands fa-x-twitter"></i></span>
-                    </a>
-                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
-                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Guest 4 -->
-      <div class="guest-card">
-        <div class="guest-card-inner">
-          <div class="guest-card-front">
-            <div class="guest-image">
-              <div class="guest-content">
-                <div class="guest-placeholder">👤</div>
-                <h3 class="guest-name">Ana Martín</h3>
-                <p class="guest-role">Cosplayer Pro</p>
-              </div>
-              
-              <div class="guest-card-overlay">
-                <div class="overlay-content">
-                  <h3 class="guest-name-overlay">Ana Martín</h3>
-                  <p class="guest-role-overlay">Cosplayer Pro</p>
-                  
-                  <div class="social-links">
-                    <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
-                      <span class="social-icon"><i class="fa-brands fa-instagram"></i></span>
-                    </a>
-                    <a href="https://tiktok.com" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
-                      <span class="social-icon"><i class="fa-brands fa-tiktok"></i></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
+    <div class="tickets-heading">
+      <span class="tickets-eyebrow">Entradas 2025</span>
+      <h2>Elige tu aventura</h2>
+      <p class="tickets-subtitle">Tres niveles de acceso pensados para cada tipo de fan</p>
     </div>
 
-    <!-- Categories Legend -->
-    <div class="legend">
-      <div class="legend-item">
-        <div class="legend-icon" style="background-color: var(--color-turquesa);"></div>
-        <span>Gaming Arena</span>
+    <div class="tickets-summary">
+      <p>Todos los pases incluyen acceso al recinto, actividades principales y acreditación digital al instante.</p>
+      <ul class="tickets-meta">
+        <li><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i> Check-in 100% digital</li>
+        <li><i class="fa-solid fa-shield-heart" aria-hidden="true"></i> Pagos seguros con Stripe</li>
+        <li><i class="fa-solid fa-gift" aria-hidden="true"></i> Merch exclusivo para los primeros 300 compradores</li>
+      </ul>
+    </div>
+
+    <div class="tickets-grid">
+      <!-- Day Pass -->
+      <article class="ticket-card ticket-card-day" aria-label="Day Pass">
+        <header class="ticket-card-header">
+          <div class="ticket-type ticket-type--day">
+            <i class="fa-solid fa-sun" aria-hidden="true"></i>
+            Day Pass
+          </div>
+          <span class="ticket-label">Plan flexible</span>
+        </header>
+
+        <div class="ticket-price-group">
+          <p class="ticket-price">
+            <span>€</span>99
+          </p>
+          <p class="ticket-price-note">Ideal si vienes por un día y quieres recorrerlo todo con calma.</p>
+        </div>
+
+        <ul class="ticket-features">
+          <li>Acceso general 1 día</li>
+          <li>Zona de exposición y stands</li>
+          <li>Meet &amp; Greet básico</li>
+          <li>Zona gaming y arcades</li>
+        </ul>
+
+        <footer class="ticket-card-footer">
+          <button class="btn btn-primary buy-ticket" data-ticket-type="day-pass">
+            Comprar ahora
+          </button>
+          <small class="ticket-guarantee">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i> Compra segura
+          </small>
+        </footer>
+      </article>
+
+      <!-- Weekend Pass -->
+      <article class="ticket-card ticket-card--highlight" aria-label="Weekend Pass">
+        <div class="discount-badge">-20%</div>
+
+        <header class="ticket-card-header">
+          <div class="ticket-type ticket-type--weekend">
+            <i class="fa-solid fa-star" aria-hidden="true"></i>
+            Weekend Pass
+          </div>
+          <span class="ticket-label ticket-label--best">Más vendido</span>
+        </header>
+
+        <div class="ticket-price-group">
+          <p class="ticket-original-price">
+            <span>€</span>198
+          </p>
+          <p class="ticket-price">
+            <span>€</span>159
+          </p>
+          <p class="ticket-price-note">Doble de contenido, acceso prioritario y perks exclusivos.</p>
+        </div>
+
+        <ul class="ticket-features">
+          <li>Acceso 2 días completo</li>
+          <li>Entrada prioritaria</li>
+          <li>10% de descuento en merchandising</li>
+          <li>Acceso a talleres pro</li>
+          <li>Meet &amp; Greet premium</li>
+        </ul>
+
+        <footer class="ticket-card-footer">
+          <button class="btn btn-primary buy-ticket" data-ticket-type="weekend-pass">
+            Comprar ahora
+          </button>
+          <small class="ticket-guarantee">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i> Compra segura
+          </small>
+        </footer>
+      </article>
+
+      <!-- VIP Experience -->
+      <article class="ticket-card" aria-label="VIP Experience">
+        <header class="ticket-card-header">
+          <div class="ticket-type ticket-type--vip">
+            <i class="fa-solid fa-crown" aria-hidden="true"></i>
+            VIP Experience
+          </div>
+          <span class="ticket-label">Acceso total</span>
+        </header>
+
+        <div class="ticket-price-group">
+          <p class="ticket-price">
+            <span>€</span>295
+          </p>
+          <p class="ticket-price-note">Vive el festival como invitado: backstage, experiencias y regalos premium.</p>
+        </div>
+
+        <ul class="ticket-features">
+          <li>Todo lo del Weekend Pass</li>
+          <li>Backstage tour exclusivo</li>
+          <li>Cena con invitados</li>
+          <li>Asientos preferentes</li>
+          <li>Pack exclusivo de regalos</li>
+          <li>Foto profesional y meet privado</li>
+        </ul>
+
+        <footer class="ticket-card-footer">
+          <button class="btn btn-primary buy-ticket" data-ticket-type="vip">
+            Comprar ahora
+          </button>
+          <small class="ticket-guarantee">
+            <i class="fa-solid fa-lock" aria-hidden="true"></i> Compra segura
+          </small>
+        </footer>
+      </article>
+    </div>
+
+    <div class="tickets-cta">
+      <div class="chip">
+        <span class="chip-icon" aria-hidden="true">⚡</span>
+        Early Bird: Ahorra 20% hasta el 15 de enero
       </div>
-      <div class="legend-item">
-        <div class="legend-icon" style="background-color: var(--color-naranja);"></div>
-        <span>Panels & Showcases</span>
-      </div>
-      <div class="legend-item">
-        <div class="legend-icon" style="background-color: var(--color-lavanda);"></div>
-        <span>Cosplay & Photoshoots</span>
-      </div>
+      <p class="tickets-cta-note">
+        ¿Dudas entre pases? Escríbenos a <a href="mailto:info@festigeekcanarias.com">info@festigeekcanarias.com</a>.
+      </p>
     </div>
   </div>
 </section>
 
-  <!-- INFO SECTION -->
-  <section class="info-banner" id="ubicacion">
+  <!-- INVITADOS -->
+  <section id="invitados" aria-labelledby="featured-guests-heading">
     <div class="container">
-      <h2 style="margin-bottom: var(--spacing-lg);">
-        Las Palmas de Gran Canaria te espera
-      </h2>
-      <p class="info-detail">
-        <span style="font-size: 24px;">📍</span>
-        <span>Recinto Ferial de Canarias · Pabellón 7</span>
-      </p>
-      <p class="info-detail" style="font-size: 18px; margin-bottom: var(--spacing-lg);">
-        <span style="font-size: 20px;">📅</span>
-        <span>15-16 de Marzo 2025 · 10:00 - 21:00</span>
-      </p>
-      <div class="cta-group">
-        <a href="#tickets" class="btn btn-primary">
-          COMPRAR TICKETS
-        </a>
-        <a href="/info" class="btn btn-outline">
-          MÁS INFORMACIÓN
-        </a>
+      <div class="guests-heading">
+        <h2 id="featured-guests-heading">Featured Guests &amp; Artists</h2>
+        <span class="guests-subtitle">Encuentra a tus voces, streamers y cosplayers favoritos</span>
+      </div>
+
+      <div class="guests-grid" role="list">
+        <!-- Joel -->
+        <article class="guest-card" role="listitem">
+          <div class="guest-image guest-photo-joel">
+            <div class="guest-content">
+              <h3 class="guest-name">Joel Gutiérrez</h3>
+              <p class="guest-role">Doblador de Anime</p>
+            </div>
+
+            <div class="guest-card-overlay">
+              <div class="overlay-content">
+                <h3 class="guest-name-overlay">Joel Gutiérrez</h3>
+                <p class="guest-role-overlay">Doblador de Anime</p>
+                <div class="social-links">
+                  <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                  <a href="https://tiktok.com" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                  </a>
+                  <a href="https://facebook.com" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Marina -->
+        <article class="guest-card" role="listitem">
+          <div class="guest-image guest-photo-marina">
+            <div class="guest-content">
+              <h3 class="guest-name">Marina López</h3>
+              <p class="guest-role">Artista de Cómic</p>
+            </div>
+
+            <div class="guest-card-overlay">
+              <div class="overlay-content">
+                <h3 class="guest-name-overlay">Marina López</h3>
+                <p class="guest-role-overlay">Artista de Cómic</p>
+                <div class="social-links">
+                  <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                    <i class="fa-brands fa-x-twitter"></i>
+                  </a>
+                  <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                  <a href="https://facebook.com" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Carlos -->
+        <article class="guest-card" role="listitem">
+          <div class="guest-image guest-photo-carlos">
+            <div class="guest-content">
+              <h3 class="guest-name">Carlos Ruiz</h3>
+              <p class="guest-role">Streamer Gaming</p>            </div>
+
+            <div class="guest-card-overlay">
+              <div class="overlay-content">
+                <h3 class="guest-name-overlay">Carlos Ruiz</h3>
+                <p class="guest-role-overlay">Streamer Gaming</p>
+                <div class="social-links">
+                  <a href="https://tiktok.com" class="social-link" target="_blank" rel="noopener" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                  </a>
+                  <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                  <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                    <i class="fa-brands fa-x-twitter"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Claudia -->
+        <article class="guest-card" role="listitem">
+          <div class="guest-image guest-photo-claudia">
+            <div class="guest-content">
+              <h3 class="guest-name">Claudia Cristiani</h3>
+              <p class="guest-role">Cosplayer Pro</p>
+            </div>
+
+            <div class="guest-card-overlay">
+              <div class="overlay-content">
+                <h3 class="guest-name-overlay">Claudia Cristiani</h3>
+                <p class="guest-role-overlay">Cosplayer Pro</p>
+                <div class="social-links">
+                  <a href="https://facebook.com" class="social-link" target="_blank" rel="noopener" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook"></i>
+                  </a>
+                  <a href="https://instagram.com" class="social-link" target="_blank" rel="noopener" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                  <a href="https://twitter.com" class="social-link" target="_blank" rel="noopener" aria-label="Twitter">
+                    <i class="fa-brands fa-x-twitter"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend" aria-label="Leyenda de áreas del evento">
+        <div class="legend-item">
+          <div class="legend-icon legend-gaming"></div>
+          <span>Gaming Arena</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon legend-panels"></div>
+          <span>Panels &amp; Showcases</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-icon legend-cosplay"></div>
+          <span>Cosplay &amp; Photoshoots</span>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- INFO -->
+  <section class="info-banner" id="ubicacion">
+    <div class="container info-wrapper">
+      <div class="info-heading">
+        <span class="info-pretitle">FestiGeek Canarias 2025</span>
+        <h2>Las Palmas de Gran Canaria te espera</h2>
+        <p class="info-description">
+          Dos días repletos de anime, gaming competitivo, cosplay y cultura pop en el corazón del Atlántico.
+        </p>
+      </div>
+
+      <div class="info-cards" role="list">
+        <article class="info-card" role="listitem">
+          <span class="info-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+              <path d="M12 2a7 7 0 0 0-5 11.9l-2 6.1 6.1-2A7 7 0 1 0 12 2z" />
+              <circle cx="12" cy="12" r="3.2" />
+            </svg>
+          </span>
+          <h3>Recinto Ferial de Canarias</h3>
+          <p>Pabellón 7 · A un paso del centro y con conexiones para todo el archipiélago.</p>
+          <a class="info-card-link" href="https://maps.app.goo.gl/recintoferialcanarias" target="_blank" rel="noopener">
+            Ver mapa <span aria-hidden="true">→</span>
+          </a>
+        </article>
+
+        <article class="info-card" role="listitem">
+          <span class="info-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+              <path d="M5 3h14v18H5z" />
+              <path d="M8 7h8M8 11h8M8 15h5" />
+            </svg>
+          </span>
+          <h3>15 · 16 marzo 2025</h3>
+          <p>Sábado y domingo de 10:00 a 21:00. Shows en vivo, torneos y sorpresas non-stop.</p>
+          <span class="info-card-badge">Weekend Pass Ready</span>
+        </article>
+
+        <article class="info-card" role="listitem">
+          <span class="info-card-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="presentation" focusable="false">
+              <path d="M4 5h16l-1.5 12h-13z" />
+              <circle cx="9" cy="19" r="1.5" />
+              <circle cx="15" cy="19" r="1.5" />
+            </svg>
+          </span>
+          <h3>Experiencia 360°</h3>
+          <p>Artist Alley, zona retro, photo ops, meet & greet y mucho más esperando por ti.</p>
+          <span class="info-card-cta">¡Planifica tu ruta!</span>
+        </article>
+      </div>
+
+      <div class="cta-group">
+        <a href="/eventoevolve/#tickets" class="btn btn-primary">
+          Comprar tickets
+          <span class="btn-icon" aria-hidden="true">➜</span>
+        </a>
+        <a href="/eventoevolve/info" class="btn btn-outline">
+          Más información
+          <span class="btn-icon" aria-hidden="true">★</span>
+        </a>
+      </div>
+      <p class="info-note">
+        <strong>Tip:</strong> Consigue tus pases antes del 1 de marzo y desbloquea merchandising exclusivo.
+      </p>
+    </div>
+  </section>
+
   <!-- FOOTER -->
-  <footer>
+  <footer class="site-footer">
+    <div class="footer-ribbon">
+      <div class="container ribbon-inner">
+        <span class="ribbon-tag">¡Atención, geeks!</span>
+        <p>Entradas Early Bird disponibles hasta el 31 de mayo. ¡No te quedes fuera!</p>
+        <a class="btn btn-outline btn-sm" href="/eventoevolve/entradas">Compra ahora</a>
+      </div>
+    </div>
+
     <div class="container">
-      <div class="footer-grid">
-        
+      <div class="footer-core">
+        <div class="footer-brand">
+          <span class="footer-logo">FestiGeek Canarias</span>
+          <p class="footer-tagline">Donde la energía pop, el anime y el gaming chocan en vivo.</p>
+
+          <div class="footer-social" aria-label="Redes sociales">
+            <a href="https://instagram.com/festigeekcanarias" class="footer-social-link" target="_blank" rel="noopener" aria-label="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://tiktok.com/@festigeekcanarias" class="footer-social-link" target="_blank" rel="noopener" aria-label="TikTok">
+              <i class="fa-brands fa-tiktok"></i>
+            </a>
+            <a href="https://twitter.com/festigeekcan" class="footer-social-link" target="_blank" rel="noopener" aria-label="X (Twitter)">
+              <i class="fa-brands fa-x-twitter"></i>
+            </a>
+            <a href="https://facebook.com/festigeekcanarias" class="footer-social-link" target="_blank" rel="noopener" aria-label="Facebook">
+              <i class="fa-brands fa-facebook"></i>
+            </a>
+          </div>
+        </div>
+
         <div class="footer-section">
           <h4>Términos & Condiciones</h4>
-          <p><a href="/terminos">Consulta nuestros términos y condiciones de venta</a></p>
+          <ul class="footer-links">
+            <li><a href="/eventoevolve/terminos">Condiciones de venta</a></li>
+            <li><a href="/eventoevolve/politicas">Política de reembolsos</a></li>
+            <li><a href="/eventoevolve/faq">Preguntas frecuentes</a></li>
+          </ul>
         </div>
 
         <div class="footer-section">
-          <h4>Política de Privacidad</h4>
-          <p><a href="/privacidad">Tu privacidad es importante para nosotros</a></p>
+          <h4>Info del Evento</h4>
+          <ul class="footer-links">
+            <li><a href="/eventoevolve/programa">Programa y horarios</a></li>
+            <li><a href="/eventoevolve/speakers">Invitados confirmados</a></li>
+            <li><a href="/eventoevolve/venue">Cómo llegar</a></li>
+          </ul>
         </div>
 
-        <div class="footer-section">
-          <h4>Contacto</h4>
-          <p>
-            <a href="mailto:info@festigeekcanarias.com">info@festigeekcanarias.com</a><br>
-            <a href="tel:+34922123456">+34 922 123 456</a>
-          </p>
+        <div class="footer-section footer-newsletter">
+          <h4>Newsletter</h4>
+          <p>Recibe anuncios exclusivos, drop de merch y sorpresas pre-evento.</p>
+          <form class="newsletter-form" action="/eventoevolve/newsletter" method="post">
+            <label for="newsletter-email" class="sr-only">Correo electrónico</label>
+            <input type="email" id="newsletter-email" name="email" placeholder="tuemail@ejemplo.com" required>
+            <button type="submit" class="btn btn-primary btn-sm">Quiero noticias</button>
+          </form>
+          <small class="newsletter-note">Prometemos cero spam, solo hype.</small>
         </div>
-
       </div>
-      
+
       <div class="footer-bottom">
-        <p>© 2025 FestiGeek Canarias. Todos los derechos reservados.</p>
+        <div class="footer-bottom-left">
+          <p>© 2025 FestiGeek Canarias. Todos los derechos reservados.</p>
+        </div>
+        <div class="footer-bottom-right">
+          <a href="/eventoevolve/privacidad">Política de privacidad</a>
+          <span aria-hidden="true">•</span>
+          <a href="/eventoevolve/cookies">Política de cookies</a>
+          <span aria-hidden="true">•</span>
+          <a href="mailto:info@festigeekcanarias.com">info@festigeekcanarias.com</a>
+        </div>
       </div>
     </div>
   </footer>
+
+  <script>
+    const stripe = Stripe(import.meta.env.PUBLIC_STRIPE_PUBLISHABLE_KEY);
+
+    const buyButtons = document.querySelectorAll('.buy-ticket');
+
+    buyButtons.forEach(button => {
+      button.addEventListener('click', async (e) => {
+        const ticketType = e.currentTarget.dataset.ticketType;
+
+        button.disabled = true;
+        button.textContent = 'Procesando...';
+
+        try {
+          const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              ticketType: ticketType,
+              quantity: 1,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || 'Error al procesar la solicitud');
+          }
+
+          const { error } = await stripe.redirectToCheckout({
+            sessionId: data.sessionId,
+          });
+
+          if (error) {
+            console.error('Error de Stripe:', error);
+            alert('Error al redireccionar al checkout: ' + error.message);
+          }
+
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al procesar la compra. Por favor, intenta de nuevo.');
+          button.disabled = false;
+          button.textContent = 'Buy Now';
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
